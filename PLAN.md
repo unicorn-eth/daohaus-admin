@@ -424,14 +424,12 @@ Replicate `DaoOverview` — main dashboard for a single DAO.
 - **Features:**
   - DAO name, avatar, description
   - Key stats: total shares, total loot, member count, proposal count
-  - Governance settings: voting period, grace period, quorum, etc.
-  - Safes list summary
-  - Shamans list
-- **Components to build:** `DaoOverviewCard`, `DaoStats`, `GovernanceParams`
-- **Types:** `DaoItem`, `VaultItem`, `ShamanItem`
+
+- **Components to build:** `DaoOverviewCard`, `DaoStats`
+- **Types:** `DaoItem`, `VaultItem`
 - **Source files:**
   - `monorepo/apps/admin/src/pages/DaoOverview.tsx` — page entry point (thin wrapper, delegates entirely to macro-ui)
-  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoOverview/DaoOverview.tsx` → `DaoOverviewCard` (contains stats, governance params, safes, and shamans summary inline)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoOverview/DaoOverview.tsx` → `DaoOverviewCard` (contains stats)
   - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoOverview/DaoProfile.tsx` — name, avatar, description sub-component
 
 ### 4c. Proposals List

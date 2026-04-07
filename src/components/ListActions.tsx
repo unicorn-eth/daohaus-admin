@@ -1,14 +1,14 @@
-import { ChangeEvent, ReactNode } from 'react';
-import styled from 'styled-components';
-import { LayoutGrid, List } from 'lucide-react';
-import { Button, SingleColumnLayout, ParSm, widthQuery } from '@/lib/ui';
-import { SearchInput } from './SearchInput';
-import { SortDropdown } from './SortDropdown';
-import { sortOptions } from '@/utils/hub';
+import { ChangeEvent, ReactNode } from "react";
+import styled from "styled-components";
+import { LayoutGrid, List } from "lucide-react";
+import { Button, SingleColumnLayout, ParSm, widthQuery } from "@/lib/ui";
+import { SearchInput } from "./SearchInput";
+import { SortDropdown } from "./SortDropdown";
+import { sortOptions } from "@/utils/hub";
 
 export const ListType = {
-  Cards: 'Cards',
-  Table: 'Table',
+  Cards: "Cards",
+  Table: "Table",
 } as const;
 
 export type ListType = (typeof ListType)[keyof typeof ListType];
@@ -66,9 +66,16 @@ export const ListActions = ({
           setSearchTerm={setSearchTerm}
           totalItems={totalDaos}
         />
-        <ParSm className="network-label" style={{ alignSelf: 'center' }}>
+        <ParSm className="network-label" style={{ alignSelf: "center" }}>
           Network: <strong>{networkName}</strong>
         </ParSm>
+
+        <SortDropdown
+          id="dao-sort"
+          value={sortBy}
+          options={sortOptions}
+          onChange={switchSortBy}
+        />
         <Button
           color="secondary"
           variant="outline"
@@ -77,14 +84,8 @@ export const ListActions = ({
           onClick={toggleListType}
           IconLeft={listType === ListType.Table ? LayoutGrid : List}
         >
-          {listType === ListType.Table ? 'Card View' : 'List View'}
+          {listType === ListType.Table ? "Card View" : "List View"}
         </Button>
-        <SortDropdown
-          id="dao-sort"
-          value={sortBy}
-          options={sortOptions}
-          onChange={switchSortBy}
-        />
       </ControlBar>
       {children}
     </SingleColumnLayout>

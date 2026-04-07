@@ -109,6 +109,7 @@ export type DaoItem = {
   name: string;
   rawProfile: RecordItem[];
   profile?: DaoProfile;
+  activeProposals?: { id: string }[];
   shamen: ShamanItem[];
   vaults: VaultItem[];
 };

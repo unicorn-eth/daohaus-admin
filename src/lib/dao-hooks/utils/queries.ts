@@ -197,9 +197,17 @@ const daoFields = `
 `;
 
 export const FIND_DAO = gql`
-  query dao($daoid: String!) {
+  query dao($daoid: String!, $now: BigInt! = "0") {
     dao(id: $daoid) {
       ${daoFields}
+      activeProposals: proposals(
+        first: 101
+        orderBy: createdAt
+        orderDirection: desc
+        where: { cancelled: false, sponsored: true, graceEnds_gt: $now }
+      ) {
+        id
+      }
     }
   }
 `;
@@ -215,7 +223,7 @@ export const LIST_ALL_DAOS = gql`
       skip: $skip
       first: $first
       orderBy: $orderBy
-      orderDescription: $orderDescription
+      orderDirection: $orderDirection
     ) {
       ${daoFields}
     }
@@ -234,7 +242,7 @@ export const SEARCH_DAOS = gql`
       skip: $skip
       first: $first
       orderBy: $orderBy
-      orderDescription: $orderDescription
+      orderDirection: $orderDirection
       where: { name_contains: $name }
     ) {
       ${daoFields}
@@ -325,7 +333,7 @@ export const FIND_PROPOSAL = gql`
 `;
 
 export const LIST_ALL_DAO_PROPOSALS = gql`
-  query proposal(
+  query listProposals(
     $skip: Int!
     $first: Int!
     $orderBy: String!
@@ -336,7 +344,7 @@ export const LIST_ALL_DAO_PROPOSALS = gql`
       skip: $skip
       first: $first
       orderBy: $orderBy
-      orderDescription: $orderDescription,
+      orderDirection: $orderDirection,
       where: { dao: $daoid }
     ) {
       ${proposalFields}
@@ -383,7 +391,7 @@ export const LIST_ALL_DAO_MEMBERS = gql`
       skip: $skip
       first: $first
       orderBy: $orderBy
-      orderDescription: $orderDescription,
+      orderDirection: $orderDirection,
       where: { dao: $daoid }
     ) {
       ${memberFields}
@@ -437,7 +445,7 @@ export const LIST_RECORDS = gql`
       skip: $skip
       first: $first
       orderBy: $orderBy
-      orderDescription: $orderDescription
+      orderDirection: $orderDirection
       where: { dao: $daoid, table: $table }
     ) {
       ${recordsFields}
@@ -471,7 +479,7 @@ export const LIST_ALL_EXITS = gql`
       skip: $skip
       first: $first
       orderBy: $orderBy
-      orderDescription: $orderDescription
+      orderDirection: $orderDirection
       where: { dao: $daoid }
     ) {
       id

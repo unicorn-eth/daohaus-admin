@@ -1,6 +1,6 @@
-import { ChangeEvent } from 'react';
-import styled from 'styled-components';
-import { Label, Select, widthQuery } from '@/lib/ui';
+import { ChangeEvent } from "react";
+import styled from "styled-components";
+import { Label, Select, widthQuery } from "@/lib/ui";
 
 type SortOption = { name: string; value: string };
 
@@ -15,7 +15,7 @@ type SortDropdownProps = {
 const SelectBox = styled.div`
   display: flex;
   align-items: center;
-  width: 32rem;
+  width: 24rem;
   label {
     display: block;
     width: 10rem;
@@ -33,7 +33,7 @@ const SelectBox = styled.div`
 
 export const SortDropdown = ({
   id,
-  label = 'Sort By',
+  label = "Sort By",
   value,
   options,
   onChange,

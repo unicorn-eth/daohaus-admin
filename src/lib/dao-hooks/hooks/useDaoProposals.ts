@@ -23,7 +23,7 @@ export const useDaoProposals = ({
 
   if (!hookContext || !hookContext.config.graphKey) {
     console.error(
-      "useDaoProposals: DaoHooksContext must be used within a DaoHooksProvider"
+      "useDaoProposals: DaoHooksContext must be used within a DaoHooksProvider",
     );
   }
 

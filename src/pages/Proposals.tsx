@@ -1,3 +1,16 @@
+import { useCurrentDao } from "@/hooks/useCurrentDao";
+import { ProposalList } from "@/components/ProposalList";
+import { Button } from "@/lib/ui";
+import { Plus } from "lucide-react";
+
 export const Proposals = () => {
-  return <div>Proposals</div>;
+  const { daoChain, daoId } = useCurrentDao();
+
+  return (
+    <ProposalList
+      chainid={daoChain}
+      daoid={daoId}
+      rightActionEl={<Button IconLeft={Plus}>New Proposal</Button>}
+    />
+  );
 };

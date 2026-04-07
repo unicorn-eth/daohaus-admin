@@ -37,8 +37,10 @@ export const useDao = ({
     queryFn: async (): Promise<{
       dao: DaoItem;
     }> => {
+      const now = String(Math.floor(Date.now() / 1000));
       const daores = (await graphQLClient.request(FIND_DAO, {
         daoid,
+        now,
       })) as {
         dao: DaoItem;
       };
