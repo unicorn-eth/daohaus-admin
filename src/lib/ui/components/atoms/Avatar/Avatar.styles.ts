@@ -1,11 +1,15 @@
-import * as RadixAvatar from '@radix-ui/react-avatar';
-import styled from 'styled-components';
+import * as RadixAvatar from "@radix-ui/react-avatar";
+import styled from "styled-components";
 
 const sizes: Record<string, string> = {
-  sm: '2.5rem',
-  md: '3.5rem',
-  lg: '4.5rem',
-  xl: '5.5rem',
+  sm: "2.5rem",
+  md: "3.5rem",
+  lg: "4.5rem",
+  xl: "5.5rem",
+  "2xl": "7.5rem",
+  "3xl": "9.5rem",
+  "4xl": "13rem",
+  "5xl": "18rem",
 };
 const handleSizing = (size: string) => (sizes[size] ? sizes[size] : size);
 

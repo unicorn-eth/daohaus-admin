@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { Loading } from '../Loading';
-import { ButtonJustifyContent, ButtonColor } from './Button.types';
+import { Loading } from "../Loading";
+import { ButtonJustifyContent, ButtonColor } from "./Button.types";
 
 export const StyledButton = styled.button<{
   $justify: ButtonJustifyContent;

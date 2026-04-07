@@ -1,15 +1,15 @@
-import React from 'react';
-import classNames from 'classnames';
-import { ExternalLink } from 'lucide-react';
+import React from "react";
+import classNames from "classnames";
+import { ExternalLink } from "lucide-react";
 
-import { LinkProps, PolymorphicLinkProps } from './Link.types';
-import { StyledLink } from './Link.styles';
+import { LinkProps, PolymorphicLinkProps } from "./Link.types";
+import { StyledLink } from "./Link.styles";
 
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   (
     {
-      href = '/',
-      target = '_blank',
+      href = "/",
+      target = "_blank",
       showExternalIcon = true,
       selected,
       disabled,
@@ -18,7 +18,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       className,
       children,
     },
-    ref
+    ref,
   ) => {
     const classes = classNames({ selected, disabled });
     return (
@@ -30,15 +30,15 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       >
         {LeftIcon && <LeftIcon className="icon-left" />}
         {children}
-        {(showExternalIcon && <ExternalLink />) ||
+        {(showExternalIcon && <ExternalLink size="12" />) ||
           (RightIcon && <RightIcon className="icon-right" />)}
       </StyledLink>
     );
-  }
+  },
 );
 
 export const UnstyledPolymorphicLink = <
-  Element extends React.ElementType = 'a'
+  Element extends React.ElementType = "a",
 >({
   as,
   disabled,
@@ -46,7 +46,7 @@ export const UnstyledPolymorphicLink = <
   className,
   ...restProps
 }: PolymorphicLinkProps<Element>) => {
-  const Component = as || 'a';
+  const Component = as || "a";
 
   const classes = classNames({ disabled });
 

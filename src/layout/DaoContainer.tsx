@@ -1,5 +1,6 @@
 import { Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useAccount } from "wagmi";
 
 import { useDao } from "@/lib/dao-hooks";
 import { H4 } from "@/lib/ui";
@@ -23,15 +24,16 @@ export const DaoContainer = () => {
   const base = `/molochv3/${daochain}/${daoid}`;
 
   const { dao } = useDao({ chainid: daochain, daoid });
+  const { address } = useAccount();
 
   const navLinks: NavLink[] = [
     { label: "Hub", href: "/" },
     { label: "DAO", href: base },
     { label: "Proposals", href: `${base}/proposals` },
-    { label: "Members", href: `${base}/members` },
     { label: "Safes", href: `${base}/safes` },
+    { label: "Members", href: `${base}/members` },
     { label: "Settings", href: `${base}/settings` },
-    { label: "Profile", href: `${base}/member/0x0123/` },
+    ...(address ? [{ label: "Profile", href: `${base}/member/${address}/` }] : []),
   ];
 
   const leftNav = (

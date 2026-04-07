@@ -185,7 +185,7 @@ export type ProposalItem = {
     quorumPercent: string;
     minRetentionPercent: string;
   };
-  votes: VoteItem;
+  votes: VoteItem[];
 };
 
 export type VoteItem = {

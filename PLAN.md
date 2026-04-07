@@ -486,6 +486,7 @@ Replicate `Members` — all members of a DAO.
 - **Data:** `useDaoMembers({ chainid, daoid })`
 - **Features:**
   - Member list with address, shares, loot, delegate info
+  - Member action menu (Delegate To, Guild Kick) → stub (Phase 5)
   - "Add Member" button → stub (Phase 5)
 - **Components to build:** `MemberList`, `MemberRow`
 - **Types:** `MemberItem`
@@ -575,8 +576,6 @@ const SAFE_API_BASE: Record<string, string> = {
 };
 // GET {base}/api/v1/safes/{safeAddress}/balances/?trusted=true
 ```
-
-If the Safe API is unavailable for a chain, fall back to the Sequence Indexer. Keep `0xsequence` in package.json until the fallback decision is confirmed and tested across all supported chains.
 
 ### 4h. Settings
 
