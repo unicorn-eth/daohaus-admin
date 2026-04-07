@@ -92,10 +92,7 @@ export const ProposalDetailCard = ({
       <Section>
         <SubmittedRow>
           <ParMd color={theme.secondary.step11}>Submitted by</ParMd>
-          <MemberCard
-            variant="ghost"
-            profile={{ address: proposal.createdBy }}
-          >
+          <MemberCard variant="ghost" profile={{ address: proposal.createdBy }}>
             <MemberCardExplorerLink
               explorerNetworkId={daoChain as ValidNetwork}
               profileAddress={proposal.createdBy}

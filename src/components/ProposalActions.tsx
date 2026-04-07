@@ -14,7 +14,7 @@ const ActionsCard = styled(Card)`
   width: 45.7rem;
   padding: 2rem;
   border: none;
-  margin-bottom: 3.4rem;
+  /* margin-bottom: 3.4rem; */
   height: fit-content;
 
   @media ${widthQuery.md} {

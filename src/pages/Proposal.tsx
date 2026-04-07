@@ -10,6 +10,8 @@ import {
 } from "@/lib/utils";
 import { ProposalDetailCard } from "@/components/ProposalDetailCard";
 import { ProposalActions } from "@/components/ProposalActions";
+import { ProposalActionData } from "@/components/ProposalActionData";
+import { ProposalHistory } from "@/components/ProposalHistory";
 
 export const Proposal = () => {
   const { daoChain, daoId } = useCurrentDao();
@@ -38,21 +40,30 @@ export const Proposal = () => {
   }
 
   const status = getProposalStatus(proposal);
-  const typeLabel = getProposalTypeLabel(proposal.proposalType, PROPOSAL_TYPE_LABELS);
+  const typeLabel = getProposalTypeLabel(
+    proposal.proposalType,
+    PROPOSAL_TYPE_LABELS,
+  );
 
   return (
     <BiColumnLayout
       title={proposal.title || "(No Title)"}
       subtitle={`${proposal.proposalId} | ${typeLabel}`}
       left={
-        <ProposalDetailCard
-          proposal={proposal}
-          daoChain={daoChain}
-          daoId={daoId}
-        />
+        <div>
+          <ProposalDetailCard
+            proposal={proposal}
+            daoChain={daoChain}
+            daoId={daoId}
+          />
+          <ProposalActionData proposal={proposal} />
+        </div>
       }
       right={
-        <ProposalActions proposal={proposal} status={status} detailed />
+        <div>
+          <ProposalActions proposal={proposal} status={status} detailed />
+          <ProposalHistory proposal={proposal} daoChain={daoChain} />
+        </div>
       }
     />
   );

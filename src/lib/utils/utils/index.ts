@@ -16,3 +16,4 @@ export * from './validation';
 export * from './error';
 export * from './viem';
 export * from './proposalStatus';
+export * from './historyHelpers';
