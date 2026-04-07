@@ -23,3 +23,16 @@ export const SUPPORTED_HEX_CHAIN_IDS = Object.values(CHAIN_ID_TO_HEX);
 
 export const isSupportedChain = (hex: string): boolean =>
   hex.toLowerCase() in HEX_TO_CHAIN_ID;
+
+const HEX_TO_NETWORK_NAME: Record<string, string> = {
+  '0x1': 'Ethereum',
+  '0x64': 'Gnosis',
+  '0x89': 'Polygon',
+  '0xa': 'Optimism',
+  '0xa4b1': 'Arbitrum',
+  '0xaa36a7': 'Sepolia',
+  '0x2105': 'Base',
+};
+
+export const getNetworkName = (hexChainId: string): string =>
+  HEX_TO_NETWORK_NAME[hexChainId.toLowerCase()] ?? hexChainId;

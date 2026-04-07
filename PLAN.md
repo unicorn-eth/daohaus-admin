@@ -392,17 +392,29 @@ Build pages in this order (simplest to most complex):
 
 Replicate `HomeDashboard` — lists all DAOs the connected user is a member of.
 
+Functionality to exclude:
+We are not going to include the Filter by network (chain selector). That can be controlled with the ConnectButton in the AppLayout.tsx. The list of daos should always display the connected network. Instead of the filter, just display the connected network name in the menu area above the dao list.
+
 - **Data:** `useDaosForAddress({ chainid, address: connectedAddress })`
 - **Features:**
   - Card view and table view toggle
-  - Filter by network (chain selector)
+  - Display connected network name
   - Search by DAO name
   - Sort by name, member count, proposal count
   - Handles disconnected state (show connect prompt)
-- **Components to build:** `DaoCard`, `DaoTable`, `DaoFilterDropdown`, `SearchInput`, `SortDropdown`, `ListActions`
+- **Components to build:** `DaoCard`, `DaoTable`, `SearchInput`, `SortDropdown`, `ListActions`
 - **Types:** `DaoItem`, `MemberItem`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Home.tsx` — page entry point
+  - `monorepo/apps/admin/src/components/HomeDashboard.tsx` — top-level dashboard component
+  - `monorepo/apps/admin/src/components/DaoCard.tsx` → `DaoCard`
+  - `monorepo/apps/admin/src/components/DaoTable.tsx` → `DaoTable`
+  - `monorepo/apps/admin/src/components/SearchInput.tsx` → `SearchInput`
+  - `monorepo/apps/admin/src/components/SortDropdown.tsx` → `SortDropdown`
+  - `monorepo/apps/admin/src/components/ListActions.tsx` → `ListActions`
+  - `monorepo/apps/admin/src/components/HomeNotConnected.tsx` → disconnected state prompt
 
-> **Note:** Old admin fetches all DAOs and filters client-side. `useDaosForAddress` in dao-hooks already filters by member address. Network filter will require calling the hook per chain or filtering the returned results.
+> **Note:** Old admin fetches all DAOs and filters client-side. `useDaosForAddress` in dao-hooks already filters by member address..
 
 ### 4b. DAO Overview
 
@@ -417,6 +429,10 @@ Replicate `DaoOverview` — main dashboard for a single DAO.
   - Shamans list
 - **Components to build:** `DaoOverviewCard`, `DaoStats`, `GovernanceParams`
 - **Types:** `DaoItem`, `VaultItem`, `ShamanItem`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/DaoOverview.tsx` — page entry point (thin wrapper, delegates entirely to macro-ui)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoOverview/DaoOverview.tsx` → `DaoOverviewCard` (contains stats, governance params, safes, and shamans summary inline)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoOverview/DaoProfile.tsx` — name, avatar, description sub-component
 
 ### 4c. Proposals List
 
@@ -431,6 +447,14 @@ Replicate `Proposals` — all proposals for a DAO.
 - **Components to build:** `ProposalCard`, `ProposalStatusBadge`, `ProposalList`
 - **Types:** `ProposalItem`
 - **Proposal status calculation:** Port `proposalsStatus.ts` from `monorepo/libs/moloch-v3-data/src/` — contains `getProposalStatus()` logic that determines state from timestamps and boolean flags
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Proposals.tsx` — page entry point (thin wrapper, delegates to macro-ui)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalList/ProposalList.tsx` → `ProposalList` (includes filter, search, pagination)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalList/FilterDropdown.tsx` — status filter UI
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalList/SearchInput.tsx` — search input
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/ProposalCard.tsx` → `ProposalCard`
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/ProposalCardOverview.tsx` — card header/overview section
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/VotingBar.tsx` → `VoteBar` (yes/no percentages)
 
 ### 4d. Proposal Detail
 
@@ -446,6 +470,16 @@ Replicate `Proposal` — single proposal detail view.
   - Transaction history
 - **Components to build:** `ProposalDetails`, `VoteList`, `VoteBar`, `ProposalTimeline`
 - **Types:** `ProposalItem`, `VoteItem`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Proposal.tsx` — page entry point
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalDetails/ProposalDetails.tsx` → `ProposalDetails`
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalDetails/ProposalDetailsContainer.tsx` — layout wrapper with data fetching
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalDetails/ProposalAdditionalDetails.tsx` — timeline and extended metadata
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalHistory/VoteList.tsx` → `VoteList`
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalHistory/ProposalHistory.tsx` — transaction history section
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalHistory/ProposalHistoryCard.tsx` — individual history entry
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/VotingBar.tsx` → `VoteBar`
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalActionData/ProposalActionData.tsx` — decoded proposal action data display
 
 ### 4e. Members List
 
@@ -457,6 +491,11 @@ Replicate `Members` — all members of a DAO.
   - "Add Member" button → stub (Phase 5)
 - **Components to build:** `MemberList`, `MemberRow`
 - **Types:** `MemberItem`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Members.tsx` — page entry point
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberList/MemberList.tsx` → `MemberList`
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberList/MembersOverview.tsx` — aggregate stats header (total shares, loot, member count)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberDisplay/MemberDisplay.tsx` → `MemberRow` (address + ENS display per row)
 
 ### 4f. Member Detail
 
@@ -480,6 +519,13 @@ Replicate `Member` — single member profile.
   Wrap this in a reusable `useProfile(address)` hook at `src/hooks/useProfile.ts` that returns `{ ensName, ensAvatar, displayName }` — `displayName` falls back to a truncated address if no ENS name found. This replaces `@daohaus/profile-data`.
 - **Components to build:** `MemberProfile`, `MemberStats`
 - **Types:** `MemberItem`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Member.tsx` — page entry point
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/MemberProfileCard.tsx` → top-level card (shares, loot, delegate)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/MemberProfile.tsx` → `MemberProfile` (avatar, address, ENS)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/MemberProfileAvatar.tsx` — avatar + ENS display
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/MemberTokens.tsx` — shares/loot breakdown
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalDetails/MemberDataPoint.tsx` — reusable labeled stat
 
 ### 4g. Safes / Vaults
 
@@ -492,6 +538,12 @@ Replicate `Safes` — list of DAO-controlled safes and token balances.
   - "New Safe" button → stub (Phase 5)
 - **Components to build:** `SafeCard`, `TokenBalanceList`
 - **Types:** `VaultItem`, `TokenBalance`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Safes.tsx` — page entry point
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/SafesList/SafesList.tsx` — list container (iterates vaults, renders one SafeCard each)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/SafeCard/SafeCard.tsx` → `SafeCard` (name, address, ragequittable flag)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/SafeCard/SafeBalancesTable.tsx` → `TokenBalanceList` (ERC-20 rows with amounts)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/SafeCard/SafeActionMenu.tsx` — action menu (add safe, etc.) → stub in Phase 4
 
 #### Token Balance API Assessment: Sequence Indexer vs. Gnosis Safe API
 
@@ -540,6 +592,14 @@ Replicate `Settings` — DAO governance configuration.
   - "Edit Settings" button → stub (Phase 5)
 - **Components to build:** `SettingsCard`, `ShamanList`
 - **Types:** `DaoItem`, `ShamanItem`, `DaoProfile`
+- **Source files:**
+  - `monorepo/apps/admin/src/pages/Settings.tsx` — page entry point
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoSettings/DaoSettings.tsx` → top-level settings component (`SettingsCard`)
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoSettings/GovernanceSettings.tsx` — voting period, grace period, quorum, thresholds
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoSettings/MetadataSettings.tsx` — name, description, avatar, tags, links
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoSettings/ShamanList.tsx` → `ShamanList`
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoSettings/TokenSettings.tsx` — shares/loot token info
+  - `monorepo/libs/moloch-v3-macro-ui/src/components/DaoSettings/ContractSettings.tsx` — contract addresses display
 
 **Testable after each page:** Page renders real data, handles loading and error states, all read-only UI matches the current admin app visually.
 

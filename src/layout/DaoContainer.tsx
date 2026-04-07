@@ -1,9 +1,9 @@
-import { Outlet, useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { Outlet, useParams } from "react-router-dom";
+import styled from "styled-components";
 
-import { useDao } from '@/lib/dao-hooks';
-import { H4 } from '@/lib/ui';
-import { AppLayout, NavLink } from './AppLayout';
+import { useDao } from "@/lib/dao-hooks";
+import { H4 } from "@/lib/ui";
+import { AppLayout, NavLink } from "./AppLayout";
 
 const DaoTitle = styled.div`
   display: flex;
@@ -25,33 +25,26 @@ export const DaoContainer = () => {
   const { dao } = useDao({ chainid: daochain, daoid });
 
   const navLinks: NavLink[] = [
-    { label: 'Overview', href: base },
-    { label: 'Proposals', href: `${base}/proposals` },
-    { label: 'Members', href: `${base}/members` },
-    { label: 'Safes', href: `${base}/safes` },
-  ];
-
-  const dropdownLinks: NavLink[] = [
-    { label: 'Settings', href: `${base}/settings` },
-    { label: 'New Proposal', href: `${base}/new-proposal` },
-    { label: 'Rage Quit', href: `${base}/ragequit` },
+    { label: "Hub", href: "/" },
+    { label: "DAO", href: base },
+    { label: "Proposals", href: `${base}/proposals` },
+    { label: "Members", href: `${base}/members` },
+    { label: "Safes", href: `${base}/safes` },
+    { label: "Settings", href: `${base}/settings` },
+    { label: "Profile", href: `${base}/member/0x0123/` },
   ];
 
   const leftNav = (
     <DaoTitle>
       {dao?.profile?.avatarImg && (
-        <DaoAvatar src={dao.profile.avatarImg} alt={dao.name ?? 'DAO'} />
+        <DaoAvatar src={dao.profile.avatarImg} alt={dao.name ?? "DAO"} />
       )}
-      <H4>{dao?.name ?? 'Loading…'}</H4>
+      <H4>{dao?.name ?? "Loading…"}</H4>
     </DaoTitle>
   );
 
   return (
-    <AppLayout
-      leftNav={leftNav}
-      navLinks={navLinks}
-      dropdownLinks={dropdownLinks}
-    >
+    <AppLayout leftNav={leftNav} navLinks={navLinks}>
       <Outlet />
     </AppLayout>
   );

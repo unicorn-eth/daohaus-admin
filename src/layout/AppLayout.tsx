@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import styled from 'styled-components';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ReactNode } from "react";
+import styled from "styled-components";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import {
   OuterLayout,
@@ -15,8 +15,12 @@ import {
   NavMenuViewport,
   Footer,
   widthQuery,
-} from '@/lib/ui';
-import { ChevronDown } from 'lucide-react';
+  DropdownMenu,
+  DropdownButtonTrigger,
+  DropdownContent,
+  DropdownItem,
+} from "@/lib/ui";
+import { ChevronDown } from "lucide-react";
 
 export type NavLink = { label: string; href: string };
 
@@ -46,6 +50,17 @@ const NavBar = styled.nav`
   align-items: center;
   gap: 3rem;
   min-height: 4.4rem;
+  @media ${widthQuery.sm} {
+    display: none;
+  }
+`;
+
+const MobileNavRow = styled.div`
+  display: none;
+  @media ${widthQuery.sm} {
+    display: flex;
+    padding: 0 2rem 1.2rem;
+  }
 `;
 
 const StyledNavMenuList = styled(NavMenuList)`
@@ -56,16 +71,27 @@ const NavLinkItem = styled(RouterLink)<{ $active?: boolean }>`
   display: block;
   padding: 1.2rem 1.4rem;
   text-decoration: none;
-  font-size: ${({ theme }) => theme.font.size.md};
+  font-size: ${({ theme }) => theme.font.size.lg};
   font-weight: ${({ theme }) => theme.font.weight.reg};
   color: ${({ theme, $active }) =>
     $active ? theme.primary.step11 : theme.navigationMenu.baseItem.color};
   border-bottom: 2px solid
-    ${({ theme, $active }) => ($active ? theme.primary.step11 : 'transparent')};
-  transition: color 0.15s ease, border-color 0.15s ease;
+    ${({ theme, $active }) => ($active ? theme.primary.step11 : "transparent")};
+  border-radius: 0;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
   &:hover {
     color: ${({ theme }) => theme.navigationMenu.baseItem.hover.bg};
   }
+`;
+
+const NavTriggerItem = styled(NavMenuTrigger)`
+  padding: 1.2rem 1.4rem;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.reg};
 `;
 
 const DropdownList = styled.ul`
@@ -82,16 +108,36 @@ export const AppLayout = ({
   leftNav,
   navLinks = [],
   dropdownLinks,
-  dropdownTriggerLabel = 'More',
+  dropdownTriggerLabel = "More",
 }: AppLayoutProps) => {
   const location = useLocation();
+  const allLinks = [...navLinks, ...(dropdownLinks ?? [])];
 
   return (
     <OuterLayout>
       <Header>
         <div>{leftNav}</div>
-        <ConnectButton />
+        <ConnectButton
+          accountStatus="address"
+          showBalance={false}
+          chainStatus="icon"
+        />
       </Header>
+
+      {allLinks.length > 0 && (
+        <MobileNavRow>
+          <DropdownMenu>
+            <DropdownButtonTrigger>Menu</DropdownButtonTrigger>
+            <DropdownContent align="start">
+              {allLinks.map((link) => (
+                <DropdownItem key={link.href} asChild>
+                  <RouterLink to={link.href}>{link.label}</RouterLink>
+                </DropdownItem>
+              ))}
+            </DropdownContent>
+          </DropdownMenu>
+        </MobileNavRow>
+      )}
 
       {navLinks.length > 0 && (
         <NavBar>
@@ -111,10 +157,13 @@ export const AppLayout = ({
               })}
               {dropdownLinks && dropdownLinks.length > 0 && (
                 <NavMenuItem>
-                  <NavMenuTrigger>
+                  <NavTriggerItem>
                     {dropdownTriggerLabel}
-                    <ChevronDown size="1.4rem" style={{ marginLeft: '0.4rem' }} />
-                  </NavMenuTrigger>
+                    <ChevronDown
+                      size="1.4rem"
+                      style={{ marginLeft: "0.4rem" }}
+                    />
+                  </NavTriggerItem>
                   <NavMenuContent>
                     <DropdownList>
                       {dropdownLinks.map((link) => {

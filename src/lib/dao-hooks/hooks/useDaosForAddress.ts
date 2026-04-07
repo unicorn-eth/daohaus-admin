@@ -2,10 +2,13 @@ import { GraphQLClient } from "graphql-request";
 
 import { useQuery } from "@tanstack/react-query";
 import { LIST_ALL_DAOS_FOR_ADDRESS } from "../utils/queries";
-import type { DaoItem, MemberItem } from "../utils/types";
+import type { DaoItem, DaoProfile, MemberItem } from "../utils/types";
+import { addParsedContent } from "../utils/yeeter-data-helpers";
 import { useContext } from "react";
 import { DaoHooksContext } from "../DaoHooksContext";
 import { getGraphUrl } from "../utils/endpoints";
+
+type DaoWithMembers = DaoItem & { members: MemberItem[] };
 
 export const useDaosForAddress = ({
   chainid,
@@ -30,17 +33,21 @@ export const useDaosForAddress = ({
 
   const graphQLClient = new GraphQLClient(yeeterUrl);
 
-  type DaosWithMembers = DaoItem &
-    {
-      members: MemberItem[];
-    }[];
-
   const { data, ...rest } = useQuery({
     queryKey: [`list-daos-address`, { chainid, address }],
     enabled: Boolean(chainid && address),
-    queryFn: (): Promise<{
-      daos: DaosWithMembers;
-    }> => graphQLClient.request(LIST_ALL_DAOS_FOR_ADDRESS, { address }),
+    queryFn: async (): Promise<{ daos: DaoWithMembers[] }> => {
+      const res = await graphQLClient.request<{ daos: DaoWithMembers[] }>(
+        LIST_ALL_DAOS_FOR_ADDRESS,
+        { address }
+      );
+      return {
+        daos: res.daos.map((dao) => ({
+          ...dao,
+          profile: addParsedContent<DaoProfile>(dao.rawProfile?.[0]),
+        })),
+      };
+    },
   });
 
   return {
