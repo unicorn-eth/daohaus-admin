@@ -14,6 +14,7 @@ export default defineConfig({
       '@/utils': resolve(__dirname, 'src/utils'),
       '@/layout': resolve(__dirname, 'src/layout'),
       '@/types': resolve(__dirname, 'src/types/index.ts'),
+      '@/legos': resolve(__dirname, 'src/legos'),
     },
   },
   define: {

@@ -1,0 +1,207 @@
+import { createPublicClient, trim, Address } from 'viem';
+import {
+  ABI,
+  EthAddress,
+  isJSON,
+  createViemClient,
+  createTransport,
+} from '@/lib/utils';
+import {
+  Keychain,
+  HAUS_RPC,
+  ValidNetwork,
+  ABI_EXPLORER_KEYS,
+  VIEM_CHAINS,
+} from '@/lib/keychain-utils';
+import { LOCAL_ABI } from '@/lib/abis';
+
+import { cacheABI, getCachedABI } from './cache';
+
+const isGnosisProxy = (abi: ABI) =>
+  abi.length === 2 &&
+  abi.every((fn) => ['constructor', 'fallback'].includes(fn?.type as string));
+
+const isSuperfluidProxy = (abi: ABI) =>
+  abi.length === 3 && abi.some((fn) => fn.name === 'initializeProxy');
+
+export const isProxyABI = (abi: ABI) =>
+  abi?.length ? abi.some((fn) => fn.name === 'implementation') : false;
+
+const getABIUrl = ({
+  chainId,
+  contractAddress,
+  explorerKeys = ABI_EXPLORER_KEYS,
+}: {
+  chainId: ValidNetwork;
+  contractAddress: string;
+  explorerKeys: Keychain;
+}) => {
+  const ABI_ADDRESS = '<<address>>';
+  const EXPLORER: Keychain = {
+    '0x1': `https://api.etherscan.io/v2/api?chainid=1&module=contract&action=getabi&address=${ABI_ADDRESS}&apikey=${explorerKeys['0x1']}`,
+    '0x64': `https://api.etherscan.io/v2/api?chainid=100&module=contract&action=getabi&address=${ABI_ADDRESS}&apikey=${explorerKeys['0x1']}`,
+    '0x89': `https://api.etherscan.io/v2/api?chainid=137&module=contract&action=getabi&address=${ABI_ADDRESS}&apikey=${explorerKeys['0x1']}`,
+    '0xa': `https://api.etherscan.io/v2/api?chainid=10&module=contract&action=getabi&address=${ABI_ADDRESS}&apikey=${explorerKeys['0x1']}`,
+    '0xa4b1': `https://api.etherscan.io/v2/api?chainid=42161&module=contract&action=getabi&address=${ABI_ADDRESS}&apiKey=${explorerKeys['0x1']}`,
+    '0xaa36a7': `https://api.etherscan.io/v2/api?chainid=11155111&module=contract&action=getabi&address=${ABI_ADDRESS}&apikey=${explorerKeys['0x1']}`,
+    '0x2105': `https://api.etherscan.io/v2/api?chainid=8453&module=contract&action=getabi&address=${ABI_ADDRESS}&apiKey=${explorerKeys['0x1']}`,
+  };
+  return EXPLORER[chainId]?.replace(ABI_ADDRESS, contractAddress);
+};
+
+const getGnosisMasterCopy = async (
+  address: EthAddress,
+  chainId: ValidNetwork,
+  rpcs: Keychain
+) => {
+  const client = createViemClient({ chainId, rpcs });
+  return await client.readContract({
+    abi: LOCAL_ABI.ERC20,
+    address,
+    functionName: 'masterCopy',
+  });
+};
+
+const getProxyStorageSlot = async ({
+  address,
+  client,
+  slot = '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc' as Address,
+}: {
+  address: Address;
+  client: ReturnType<typeof createViemClient>;
+  slot?: Address;
+}): Promise<string | false> => {
+  try {
+    const proxyAddr = await client.getStorageAt({ address, slot });
+    return trim(proxyAddr as Address);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const getImplementation = async ({
+  address,
+  chainId,
+  abi,
+  rpcs = HAUS_RPC,
+}: {
+  address: string;
+  chainId: ValidNetwork;
+  abi: ABI;
+  rpcs?: Keychain;
+}): Promise<string | false> => {
+  const client = createViemClient({ chainId, rpcs });
+  try {
+    const proxyAddr = await client.readContract({
+      address: address as EthAddress,
+      abi,
+      functionName: 'implementation',
+    });
+    return proxyAddr as string;
+  } catch {
+    return await getProxyStorageSlot({ address: address as Address, client });
+  }
+};
+
+export const processABI = async ({
+  abi,
+  fetchABI: fetchABIFn,
+  contractAddress,
+  chainId,
+  rpcs = HAUS_RPC,
+  explorerKeys = ABI_EXPLORER_KEYS,
+}: {
+  abi: ABI;
+  fetchABI: ({
+    chainId,
+    contractAddress,
+    rpcs,
+    explorerKeys,
+  }: {
+    chainId: ValidNetwork;
+    contractAddress: string;
+    rpcs: Keychain;
+    explorerKeys: Keychain;
+  }) => Promise<ABI | undefined>;
+  contractAddress: string;
+  chainId: ValidNetwork;
+  rpcs: Keychain;
+  explorerKeys: Keychain;
+}) => {
+  if (isProxyABI(abi)) {
+    const proxyAddress = await getImplementation({ address: contractAddress, chainId, abi });
+    if (proxyAddress) {
+      const newData = await fetchABIFn({ contractAddress: proxyAddress, chainId, rpcs, explorerKeys });
+      if (newData) return newData;
+      throw new Error('Could not fetch ABI from proxy');
+    }
+  } else if (isSuperfluidProxy(abi)) {
+    const client = createViemClient({ chainId, rpcs });
+    const sfProxyAddr = await client.readContract({
+      address: contractAddress as EthAddress,
+      abi: LOCAL_ABI.SUPERFLUID_PROXY,
+      functionName: 'getCodeAddress',
+    });
+    const newData = await fetchABIFn({ contractAddress: sfProxyAddr as EthAddress, chainId, rpcs, explorerKeys });
+    if (newData) return newData;
+    throw new Error('Could not fetch ABI from proxy');
+  } else if (isGnosisProxy(abi)) {
+    const gnosisProxyAddress = await getGnosisMasterCopy(
+      contractAddress as EthAddress,
+      chainId,
+      rpcs
+    );
+    return await fetchABIFn({ contractAddress: gnosisProxyAddress as EthAddress, chainId, rpcs, explorerKeys });
+  }
+  return abi;
+};
+
+export const fetchABI = async ({
+  contractAddress,
+  chainId,
+  rpcs = HAUS_RPC,
+  explorerKeys = ABI_EXPLORER_KEYS,
+}: {
+  contractAddress: string;
+  chainId: ValidNetwork;
+  rpcs?: Keychain;
+  explorerKeys?: Keychain;
+}): Promise<ABI | undefined> => {
+  const cachedABI = await getCachedABI({ address: contractAddress, chainId });
+
+  if (cachedABI) {
+    return processABI({ abi: cachedABI, fetchABI, contractAddress, chainId, rpcs, explorerKeys });
+  }
+
+  const url = getABIUrl({ contractAddress, chainId, explorerKeys });
+
+  try {
+    if (!url) throw new Error('Could not generate explorer URL with the given arguments');
+    const scanResponse = await fetch(url);
+    const data = await scanResponse.json();
+    if (data.message === 'OK' && isJSON(data.result)) {
+      const abi = JSON.parse(data.result);
+      cacheABI({ address: contractAddress, chainId, abi });
+      return processABI({ abi, fetchABI, contractAddress, chainId, rpcs, explorerKeys });
+    }
+    throw new Error('Could not fetch or parse ABI');
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+};
+
+export const getCode = async ({
+  contractAddress,
+  chainId,
+  rpcs = HAUS_RPC,
+}: {
+  contractAddress: string;
+  chainId: ValidNetwork;
+  rpcs?: Keychain;
+}) => {
+  const transport = createTransport({ chainId, rpcs });
+  const client = createPublicClient({ chain: VIEM_CHAINS[chainId], transport });
+  return await client.getBytecode({ address: contractAddress as EthAddress });
+};

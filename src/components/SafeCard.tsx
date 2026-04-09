@@ -10,6 +10,7 @@ import type { ValidNetwork } from "@/lib/keychain-utils";
 import { toWholeUnits, truncValue } from "@/lib/utils";
 import type { VaultItem, DaoItem, TokenBalance } from "@/lib/dao-hooks";
 import { useDaoTokenBalances } from "@/lib/dao-hooks";
+import { SafeActionMenu } from "./SafeActionMenu";
 
 // ── Styles ──────────────────────────────────────────────────────────────────
 
@@ -126,11 +127,12 @@ type SafeCardProps = {
   dao: DaoItem;
   safe: VaultItem;
   daoChain: string;
+  daoId: string;
 };
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export const SafeCard = ({ dao, safe, daoChain }: SafeCardProps) => {
+export const SafeCard = ({ dao, safe, daoChain, daoId }: SafeCardProps) => {
   const isTreasury = safe.safeAddress === dao.safeAddress;
   const { tokens, isLoading, isError } = useDaoTokenBalances({
     chainid: daoChain,
@@ -185,6 +187,12 @@ export const SafeCard = ({ dao, safe, daoChain }: SafeCardProps) => {
               <ParXs>Safe App</ParXs>
               <ExternalLink size={12} />
             </a>
+            <SafeActionMenu
+              ragequittable={safe.ragequittable === '1' || safe.ragequittable === 'true'}
+              safeAddress={safe.safeAddress}
+              daoChain={daoChain}
+              daoId={daoId}
+            />
           </div>
         </SafeCardHeader>
 

@@ -12,10 +12,11 @@ import {
   Dialog,
   DialogTrigger,
   DialogContent,
-  ParMd,
   DropdownLabel,
 } from "@/lib/ui";
 import type { MemberItem } from "@/lib/dao-hooks";
+import { ManageDelegate } from "./ManageDelegate";
+import { ManageTokens } from "./ManageTokens";
 
 // Styled nav link for dropdown items that navigate
 const NavItem = styled(Link)`
@@ -35,10 +36,6 @@ const ActionItem = styled(DropdownLabel)`
   }
 `;
 
-const StubContent = styled.div`
-  padding: 2rem 0;
-`;
-
 type ActiveDialog = "delegate" | "transfer" | "delegateTo";
 
 type MemberMenuProps = {
@@ -54,14 +51,6 @@ const DIALOG_TITLES: Record<ActiveDialog, string> = {
   delegateTo: "Delegate To",
 };
 
-const STUB_MESSAGES: Record<ActiveDialog, string> = {
-  delegate:
-    "Delegate your voting power to another address. Transaction form available in Phase 5.",
-  transfer:
-    "Transfer DAO shares or loot tokens. Transaction form available in Phase 5.",
-  delegateTo:
-    "Delegate your voting power to this member. Transaction form available in Phase 5.",
-};
 
 export const MemberMenu = ({
   member,
@@ -134,9 +123,16 @@ export const MemberMenu = ({
       </DropdownMenu>
 
       <DialogContent title={DIALOG_TITLES[activeDialog]}>
-        <StubContent>
-          <ParMd>{STUB_MESSAGES[activeDialog]}</ParMd>
-        </StubContent>
+        {(activeDialog === 'delegate' || activeDialog === 'delegateTo') && (
+          <ManageDelegate
+            daoChain={daoChain}
+            daoId={daoId}
+            defaultMember={activeDialog === 'delegateTo' ? member.memberAddress : undefined}
+          />
+        )}
+        {activeDialog === 'transfer' && (
+          <ManageTokens daoChain={daoChain} daoId={daoId} />
+        )}
       </DialogContent>
     </Dialog>
   );

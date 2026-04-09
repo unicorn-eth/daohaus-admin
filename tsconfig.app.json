@@ -32,7 +32,8 @@
       "@/hooks/*": ["./src/hooks/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/layout/*": ["./src/layout/*"],
-      "@/types": ["./src/types/index.ts"]
+      "@/types": ["./src/types/index.ts"],
+      "@/legos/*": ["./src/legos/*"]
     }
   },
   "include": ["src"]

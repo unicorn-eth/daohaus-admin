@@ -13,6 +13,10 @@ export { useDaoTokenBalances } from './hooks/useDaoTokenBalances';
 export { useDaoExits } from './hooks/useDaoExits';
 export { useDaoLatestRecord } from './hooks/useDaoLatestRecord';
 
+// Utils
+export { findTransaction } from './utils/transactions';
+export type { FindTxResult } from './utils/transactions';
+
 // Types
 export type {
   DaoItem,

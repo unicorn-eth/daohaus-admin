@@ -75,6 +75,8 @@ export type VaultItem = {
   ragequittable: string;
   name: string;
   safeAddress: string;
+  /** Token balances enriched from Sequence indexer — optional, not present in raw subgraph data */
+  tokenBalances?: TokenBalance[];
 };
 
 export type DaoItem = {

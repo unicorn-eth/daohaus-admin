@@ -1,8 +1,9 @@
 import { Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 
 import { useDao } from "@/lib/dao-hooks";
+import { TXBuilder } from "@/lib/tx-builder";
 import { H4 } from "@/lib/ui";
 import { AppLayout, NavLink } from "./AppLayout";
 
@@ -25,6 +26,8 @@ export const DaoContainer = () => {
 
   const { dao } = useDao({ chainid: daochain, daoid });
   const { address } = useAccount();
+  const wagmiChainId = useChainId();
+  const chainId = wagmiChainId ? `0x${wagmiChainId.toString(16)}` : undefined;
 
   const navLinks: NavLink[] = [
     { label: "Hub", href: "/" },
@@ -46,8 +49,15 @@ export const DaoContainer = () => {
   );
 
   return (
-    <AppLayout leftNav={leftNav} navLinks={navLinks}>
-      <Outlet />
-    </AppLayout>
+    <TXBuilder
+      chainId={chainId}
+      daoId={daoid}
+      safeId={dao?.safeAddress}
+      appState={{ dao, userAddress: address }}
+    >
+      <AppLayout leftNav={leftNav} navLinks={navLinks}>
+        <Outlet />
+      </AppLayout>
+    </TXBuilder>
   );
 };

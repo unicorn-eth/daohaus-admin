@@ -493,3 +493,14 @@ export const LIST_ALL_EXITS = gql`
     }
   }
 `;
+
+export const FIND_TX = gql`
+  query findTx($id: ID!) {
+    transaction: eventTransaction(id: $id) {
+      id
+      createdAt
+      daoAddress
+    }
+  }
+`;
+

@@ -1,7 +1,13 @@
-import { useCurrentDao } from "@/hooks/useCurrentDao";
-import { ProposalList } from "@/components/ProposalList";
-import { Button } from "@/lib/ui";
-import { Plus } from "lucide-react";
+import { Plus } from 'lucide-react';
+
+import { useCurrentDao } from '@/hooks/useCurrentDao';
+import { Button, Dialog, DialogContent, DialogTrigger } from '@/lib/ui';
+import {
+  BASIC_PROPOSAL_FORMS,
+  ADVANCED_PROPOSAL_FORMS,
+} from '@/lib/legos';
+import { ProposalList } from '@/components/ProposalList';
+import { NewProposalList } from '@/components/NewProposalList';
 
 export const Proposals = () => {
   const { daoChain, daoId } = useCurrentDao();
@@ -10,7 +16,19 @@ export const Proposals = () => {
     <ProposalList
       chainid={daoChain}
       daoid={daoId}
-      rightActionEl={<Button IconLeft={Plus}>New Proposal</Button>}
+      rightActionEl={
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button IconLeft={Plus}>New Proposal</Button>
+          </DialogTrigger>
+          <DialogContent title="New Proposal" description="Select proposal type">
+            <NewProposalList
+              basicProposals={Object.values(BASIC_PROPOSAL_FORMS)}
+              advancedProposals={Object.values(ADVANCED_PROPOSAL_FORMS)}
+            />
+          </DialogContent>
+        </Dialog>
+      }
     />
   );
 };

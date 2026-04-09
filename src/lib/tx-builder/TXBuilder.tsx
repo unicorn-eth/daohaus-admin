@@ -1,0 +1,122 @@
+import { TransactionReceipt } from 'viem';
+import { createContext, useState, useMemo, useContext, ReactNode } from 'react';
+
+import { ABI, ArbitraryState, ArgType, TXLego } from '@/lib/utils';
+import { isValidNetwork } from '@/lib/keychain-utils';
+
+import { TxRecord, prepareTX } from './utils/txBuilderUtils';
+import { bundleLifeCycleFns } from './utils/lifeCycleFns';
+
+export type TXLifeCycleFns = {
+  onRequestSign?: () => void;
+  onTxHash?: (txHash: string) => void;
+  onTxError?: (error: unknown) => void;
+  onTxSuccess?: (
+    txReceipt: TransactionReceipt,
+    txHash: string,
+    appState: ArbitraryState
+  ) => void;
+  onPollStart?: () => void;
+  onPollError?: (error: unknown) => void;
+  onPollSuccess?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    result: any,
+    txReceipt: TransactionReceipt,
+    appState: ArbitraryState
+  ) => void;
+};
+
+export type LifeCycleNames = keyof Required<TXLifeCycleFns>;
+
+export type ArgCallback = (state: ArbitraryState) => ArgType[] | Promise<ArgType[]>;
+
+type FireTransaction<CallerStateModel extends ArbitraryState = ArbitraryState> = ({
+  tx,
+  callerState,
+  lifeCycleFns,
+  staticArgs,
+}: {
+  tx: TXLego;
+  callerState?: CallerStateModel;
+  lifeCycleFns?: TXLifeCycleFns;
+  staticArgs?: ArgType[];
+}) => Promise<boolean> | undefined;
+
+type TxContext = {
+  transactions: TxRecord;
+  txAmt: number;
+  fireTransaction: FireTransaction;
+  appState?: ArbitraryState;
+};
+
+export const TxBuilderContext = createContext<TxContext>({
+  transactions: {},
+  fireTransaction: () => undefined,
+  txAmt: 0,
+  appState: undefined,
+});
+
+type BuilderProps<ApplicationState extends ArbitraryState = ArbitraryState> = {
+  chainId: string | undefined | null;
+  safeId?: string;
+  daoId?: string;
+  children: ReactNode;
+  appState: ApplicationState;
+  txLifeCycleFns?: TXLifeCycleFns;
+  localABIs?: Record<string, ABI>;
+  argCallbackRecord?: Record<string, (args: ArbitraryState) => ArgType[]>;
+};
+
+export const TXBuilder = ({
+  chainId,
+  safeId,
+  daoId,
+  appState,
+  children,
+  localABIs = {},
+  txLifeCycleFns = {},
+  argCallbackRecord = {},
+}: BuilderProps) => {
+  const [transactions, setTransactions] = useState<TxRecord>({});
+  const txAmt = useMemo(() => Object.values(transactions).length, [transactions]);
+
+  const fireTransaction: FireTransaction = async ({ tx, callerState, lifeCycleFns = {} }) => {
+    if (!chainId || !isValidNetwork(chainId)) {
+      lifeCycleFns?.onTxError?.(Error('Invalid network or no wallet connected'));
+      return false;
+    }
+
+    const wholeState = {
+      ...appState,
+      ...callerState,
+      chainId,
+      safeId,
+      daoId,
+      localABIs,
+    };
+
+    await prepareTX({
+      tx,
+      chainId,
+      safeId,
+      setTransactions,
+      appState: wholeState,
+      argCallbackRecord,
+      lifeCycleFns: bundleLifeCycleFns({
+        appEffects: txLifeCycleFns,
+        componentEffects: lifeCycleFns,
+      }),
+      localABIs,
+    });
+
+    return true;
+  };
+
+  return (
+    <TxBuilderContext.Provider value={{ transactions, fireTransaction, txAmt, appState }}>
+      {children}
+    </TxBuilderContext.Provider>
+  );
+};
+
+export const useTxBuilder = () => useContext(TxBuilderContext);

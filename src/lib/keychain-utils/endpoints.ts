@@ -121,14 +121,6 @@ export const GRAPH_API_KEYS = {
   '0xa': import.meta.env.VITE_GRAPH_API_KEY as string | undefined,
 };
 
-export type PinataApiKeys = {
-  pinata_api_key?: string;
-  pinata_api_secret?: string;
-};
-export const PINATA_API_KEYS: PinataApiKeys = {
-  pinata_api_key: import.meta.env.VITE_PINATA_API_KEY as string | undefined,
-  pinata_api_secret: import.meta.env.VITE_PINATA_API_SECRET as string | undefined,
-};
 // Etherscan v2 uses a single API key across all chains
 const ETHERSCAN_KEY = import.meta.env.VITE_ETHERSCAN_KEY as string | undefined;
 export const ABI_EXPLORER_KEYS: Keychain = {
