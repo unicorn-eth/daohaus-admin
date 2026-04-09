@@ -92,15 +92,15 @@ export const Member = () => {
       {member && (
         <>
           <MemberProfile member={member} daoChain={daoChain} daoId={daoId} />
+          {dao && (
+            <MemberTokens member={member} dao={dao} daoChain={daoChain} />
+          )}
           <MemberStats
             member={member}
             totalShares={dao?.totalShares ?? "0"}
             daoChain={daoChain}
             daoId={daoId}
           />
-          {dao && (
-            <MemberTokens member={member} dao={dao} daoChain={daoChain} />
-          )}
         </>
       )}
     </SingleColumnLayout>

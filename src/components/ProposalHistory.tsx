@@ -11,6 +11,7 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
+  Link,
   MemberCard,
   MemberCardCopyAddress,
   MemberCardExplorerLink,
@@ -298,9 +299,13 @@ const ProposalHistoryCard = ({
 
           {explorerLink && (
             <LinkContainer>
-              <a href={explorerLink} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={explorerLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 View Transaction
-              </a>
+              </Link>
             </LinkContainer>
           )}
         </>
