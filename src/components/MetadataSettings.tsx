@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import { indigoDark } from "@radix-ui/colors";
-import { ExternalLink } from "lucide-react";
+import {
+  GitFork,
+  MessageCircle,
+  Globe,
+  Send,
+  FileText,
+  MessageSquare,
+  Link2,
+} from "lucide-react";
 
 import {
   H3,
@@ -9,9 +17,48 @@ import {
   DataIndicator,
   Tag,
   ProfileAvatar,
+  DataMd,
+  Link as UiLink,
 } from "@/lib/ui";
 import { charLimit, formatLongDateFromSeconds } from "@/lib/utils";
-import type { DaoItem } from "@/lib/dao-hooks";
+import type { DaoItem, DaoProfileLink } from "@/lib/dao-hooks";
+
+const PREDEFINED_LABELS = [
+  "Github",
+  "Discord",
+  "Twitter",
+  "Telegram",
+  "Blog",
+  "Web",
+];
+
+const LINK_ICONS: Record<string, React.ReactNode> = {
+  Github: <GitFork size="2.2rem" />,
+  Discord: <MessageSquare size="2.2rem" />,
+  Twitter: <MessageCircle size="2.2rem" />,
+  Telegram: <Send size="2.2rem" />,
+  Blog: <FileText size="2.2rem" />,
+  Web: <Globe size="2.2rem" />,
+  default: <Link2 size="2.2rem" />,
+};
+
+function parseLinks(links?: DaoProfileLink[]): DaoProfileLink[] {
+  if (!Array.isArray(links)) return [];
+  return links.map((link) => {
+    if (typeof link === "string") {
+      try {
+        return JSON.parse(link) as DaoProfileLink;
+      } catch {
+        return {};
+      }
+    }
+    return link;
+  });
+}
+
+function isPredefinedLink(link: DaoProfileLink): boolean {
+  return !!link.label && PREDEFINED_LABELS.includes(link.label);
+}
 
 // ── Styles ──────────────────────────────────────────────────────────────────
 
@@ -53,21 +100,36 @@ const TagList = styled.div`
   margin-top: 0.4rem;
 `;
 
-const LinkList = styled.div`
+const IconLinkRow = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 0.8rem;
+  color: ${({ theme }) => theme.primary.step10};
+
+  a {
+    color: inherit;
+    display: flex;
+    align-items: center;
+  }
 `;
 
-const LinkItem = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: ${({ theme }) => theme.primary.step10};
-  text-decoration: none;
-  font-size: 1.4rem;
-  &:hover {
-    text-decoration: underline;
+const TextLinkRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: ${({ theme }) => theme.secondary.step11};
+    text-decoration: none;
+
+    &:hover {
+      color: ${({ theme }) => theme.secondary.step12};
+    }
   }
 `;
 
@@ -89,6 +151,9 @@ type MetadataSettingsProps = {
 
 export const MetadataSettings = ({ dao }: MetadataSettingsProps) => {
   const profile = dao.profile;
+  const links = parseLinks(profile?.links);
+  const iconLinks = links.filter((link) => link.url && isPredefinedLink(link));
+  const textLinks = links.filter((link) => link.url && !isPredefinedLink(link));
 
   return (
     <SettingsSection>
@@ -107,7 +172,11 @@ export const MetadataSettings = ({ dao }: MetadataSettingsProps) => {
         </div>
 
         <MetaBlock>
-          <DataIndicator label="DAO Name" data={charLimit(dao.name, 21)} size="sm" />
+          <DataIndicator
+            label="DAO Name"
+            data={charLimit(dao.name, 21)}
+            size="sm"
+          />
           <DataIndicator
             label="Summon Date"
             data={formatLongDateFromSeconds(dao.createdAt)}
@@ -122,7 +191,6 @@ export const MetadataSettings = ({ dao }: MetadataSettingsProps) => {
           )}
           {profile?.tags && profile.tags.length > 0 && (
             <LabelledValue>
-              <Label>Tags</Label>
               <TagList>
                 {profile.tags.map((tag) => (
                   <Tag key={tag} tagColor="blue">
@@ -134,25 +202,43 @@ export const MetadataSettings = ({ dao }: MetadataSettingsProps) => {
           )}
         </MetaBlock>
 
-        {profile?.links && profile.links.length > 0 && (
+        {links.length > 0 && (
           <MetaBlock>
             <LabelledValue>
-              <Label>Links</Label>
-              <LinkList>
-                {profile.links.map((link, i) =>
-                  link.url ? (
-                    <LinkItem
-                      key={i}
+              {iconLinks.length > 0 && (
+                <IconLinkRow>
+                  {iconLinks.map((link, i) => (
+                    <UiLink
+                      key={`${link.label}-${i}`}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      title={link.label}
+                      showExternalIcon={false}
                     >
-                      {link.label || link.url}
-                      <ExternalLink size={12} />
-                    </LinkItem>
-                  ) : null
-                )}
-              </LinkList>
+                      {(link.label && LINK_ICONS[link.label]) ??
+                        LINK_ICONS.default}
+                    </UiLink>
+                  ))}
+                </IconLinkRow>
+              )}
+              {textLinks.length > 0 && (
+                <TextLinkRow>
+                  {textLinks.map((link, i) => (
+                    <UiLink
+                      key={`${link.label || link.url}-${i}`}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={link.label}
+                      showExternalIcon={false}
+                    >
+                      {LINK_ICONS.default}
+                      <DataMd>{charLimit(link.label || link.url, 45)}</DataMd>
+                    </UiLink>
+                  ))}
+                </TextLinkRow>
+              )}
             </LabelledValue>
           </MetaBlock>
         )}

@@ -19,7 +19,7 @@ export const SelectApplicant = ({ daoMemberOnly, ...props }: SelectApplicantProp
   const [valError, setValError] = useState<ErrorMessage | undefined>();
   const { daoChain, daoId } = useCurrentDao();
   const { register, setValue, watch } = useFormContext();
-  const { members } = useDaoMembers();
+  const { members } = useDaoMembers({ chainid: daoChain, daoid: daoId });
 
   const inputValue = watch(props.id);
 

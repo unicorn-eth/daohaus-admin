@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import styled from "styled-components";
 
 import { H3, ParSm, DataIndicator, widthQuery } from "@/lib/ui";
@@ -28,6 +29,37 @@ const SectionHeader = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   margin-bottom: 3rem;
+`;
+
+const ButtonRouterLink = styled(RouterLink)`
+  align-items: center;
+  background-color: ${({ theme }) => theme.button.secondary.solid.bg};
+  border: 0.1rem solid ${({ theme }) => theme.button.secondary.solid.border};
+  border-radius: ${({ theme }) => theme.button.radius};
+  color: ${({ theme }) => theme.button.secondary.solid.text};
+  cursor: pointer;
+  display: inline-flex;
+  font-size: ${({ theme }) => theme.font.size.xs};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  height: 3.6rem;
+  justify-content: center;
+  letter-spacing: 1.8px;
+  min-width: 6.6rem;
+  padding: 0.9rem 1.2rem;
+  text-decoration: none;
+  transition: 0.2s all;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.button.secondary.solid.bgHover};
+    border-color: ${({ theme }) => theme.button.secondary.solid.borderHover};
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: ${({ theme }) => theme.button.secondary.solid.bgFocus};
+    border-color: ${({ theme }) => theme.button.secondary.solid.borderFocus};
+    outline: none;
+  }
 `;
 
 const DataGrid = styled.div`
@@ -63,18 +95,42 @@ type GovernanceSettingsProps = {
   daoChain: string;
 };
 
-export const GovernanceSettings = ({ dao, daoChain }: GovernanceSettingsProps) => {
+export const GovernanceSettings = ({
+  dao,
+  daoChain,
+}: GovernanceSettingsProps) => {
   const networkData = useMemo(() => getNetwork(daoChain), [daoChain]);
+  const defaultValues = useMemo(
+    () => ({
+      votingPeriod: dao.votingPeriod,
+      votingPeriodUnits: "seconds",
+      votingPeriodInSeconds: dao.votingPeriod,
+      gracePeriod: dao.gracePeriod,
+      gracePeriodUnits: "seconds",
+      gracePeriodInSeconds: dao.gracePeriod,
+      quorum: dao.quorumPercent,
+      minRetention: dao.minRetentionPercent,
+      sponsorThreshold: dao.sponsorThreshold,
+      newOffering: dao.proposalOffering,
+    }),
+    [dao],
+  );
+  const updateGovernancePath = `/molochv3/${daoChain}/${dao.id}/new-proposal?formLego=UPDATE_GOV_SETTINGS&defaultValues=${encodeURIComponent(
+    JSON.stringify(defaultValues),
+  )}`;
 
   return (
     <SettingsSection>
       <SectionHeader>
         <H3>Governance Settings</H3>
+        <ButtonRouterLink to={updateGovernancePath}>
+          Update Governance
+        </ButtonRouterLink>
       </SectionHeader>
       <Description>
         <ParSm>
           <StyledLink
-            href="https://moloch.daohaus.club/configuration/governance-configuration"
+            href="https://moloch.daohaus.fun/configuration/governance-configuration"
             target="_blank"
             rel="noreferrer"
           >

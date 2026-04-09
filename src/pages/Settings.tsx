@@ -34,7 +34,7 @@ export const Settings = () => {
           <MetadataSettings dao={dao} />
           <ContractSettings dao={dao} daoChain={daoChain} />
           <GovernanceSettings dao={dao} daoChain={daoChain} />
-          <TokenSettings dao={dao} />
+          <TokenSettings dao={dao} daoChain={daoChain} />
           <ShamanList dao={dao} daoChain={daoChain} />
         </>
       )}

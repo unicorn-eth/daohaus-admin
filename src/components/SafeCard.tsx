@@ -160,6 +160,8 @@ export const SafeCard = ({ dao, safe, daoChain, daoId }: SafeCardProps) => {
     }));
   }, [tokens, nativeSymbol]);
 
+  console.log("safe", safe);
+
   return (
     <SafeContainer>
       <SafeOverviewCard>
@@ -188,7 +190,7 @@ export const SafeCard = ({ dao, safe, daoChain, daoId }: SafeCardProps) => {
               <ExternalLink size={12} />
             </a>
             <SafeActionMenu
-              ragequittable={safe.ragequittable === '1' || safe.ragequittable === 'true'}
+              ragequittable={safe.ragequittable}
               safeAddress={safe.safeAddress}
               daoChain={daoChain}
               daoId={daoId}

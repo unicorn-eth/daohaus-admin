@@ -1,3 +1,4 @@
+import { Link as RouterLink } from "react-router-dom";
 import styled from "styled-components";
 import { indigoDark } from "@radix-ui/colors";
 
@@ -49,6 +50,10 @@ const ShamanPermissions = styled.div`
   flex: 0 0 auto;
 `;
 
+const ShamanActions = styled.div`
+  flex: 0 0 auto;
+`;
+
 const HeaderRow = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -64,6 +69,41 @@ const HeaderContract = styled.div`
 
 const HeaderPermissions = styled.div`
   flex: 0 0 auto;
+`;
+
+const HeaderActions = styled.div`
+  flex: 0 0 auto;
+`;
+
+const ButtonRouterLink = styled(RouterLink)`
+  align-items: center;
+  background-color: ${({ theme }) => theme.button.secondary.solid.bg};
+  border: 0.1rem solid ${({ theme }) => theme.button.secondary.solid.border};
+  border-radius: ${({ theme }) => theme.button.radius};
+  color: ${({ theme }) => theme.button.secondary.solid.text};
+  cursor: pointer;
+  display: inline-flex;
+  font-size: ${({ theme }) => theme.font.size.xs};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  height: 3.6rem;
+  justify-content: center;
+  letter-spacing: 1.8px;
+  min-width: 6.6rem;
+  padding: 0.9rem;
+  text-decoration: none;
+  transition: 0.2s all;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.button.secondary.solid.bgHover};
+    border-color: ${({ theme }) => theme.button.secondary.solid.borderHover};
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: ${({ theme }) => theme.button.secondary.solid.bgFocus};
+    border-color: ${({ theme }) => theme.button.secondary.solid.borderFocus};
+    outline: none;
+  }
 `;
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -99,22 +139,37 @@ export const ShamanList = ({ dao, daoChain }: ShamanListProps) => {
             <HeaderPermissions>
               <DataSm>Permissions</DataSm>
             </HeaderPermissions>
+            <HeaderActions>
+              <DataSm>Manage</DataSm>
+            </HeaderActions>
           </HeaderRow>
-          {dao.shamen.map((shaman: ShamanItem) => (
-            <ShamanRow key={`${shaman.id}-${shaman.permissions}`}>
-              <ShamanAddress>
-                <AddressDisplay
-                  address={shaman.shamanAddress}
-                  explorerNetworkId={daoChain as ValidNetwork}
-                  truncate
-                  copy
-                />
-              </ShamanAddress>
-              <ShamanPermissions>
-                <DataSm>{shaman.permissions}</DataSm>
-              </ShamanPermissions>
-            </ShamanRow>
-          ))}
+          {dao.shamen.map((shaman: ShamanItem) => {
+            const managePath = `/molochv3/${daoChain}/${dao.id}/new-proposal?formLego=UPDATE_SHAMAN&defaultValues=${encodeURIComponent(
+              JSON.stringify({
+                shamanAddress: shaman.shamanAddress,
+                shamanPermission: shaman.permissions,
+              }),
+            )}`;
+
+            return (
+              <ShamanRow key={`${shaman.id}-${shaman.permissions}`}>
+                <ShamanAddress>
+                  <AddressDisplay
+                    address={shaman.shamanAddress}
+                    explorerNetworkId={daoChain as ValidNetwork}
+                    truncate
+                    copy
+                  />
+                </ShamanAddress>
+                <ShamanPermissions>
+                  <DataSm>{shaman.permissions}</DataSm>
+                </ShamanPermissions>
+                <ShamanActions>
+                  <ButtonRouterLink to={managePath}>Manage</ButtonRouterLink>
+                </ShamanActions>
+              </ShamanRow>
+            );
+          })}
         </>
       )}
     </SettingsSection>

@@ -23,15 +23,20 @@ const SectionHeader = styled.div`
 `;
 
 const AddressGrid = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2.4rem;
+
+  @media ${widthQuery.sm} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const AddressRow = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  min-width: 0;
 `;
 
 // ── Component ────────────────────────────────────────────────────────────────

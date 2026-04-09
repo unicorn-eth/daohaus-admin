@@ -4,9 +4,9 @@ import { RegisterOptions, useFormContext } from 'react-hook-form';
 import { handleBaseUnits, toWholeUnits, truncValue } from '@/lib/utils';
 import { Buildable, Button, WrappedInput } from '@/lib/ui';
 import { isValidNetwork } from '@/lib/keychain-utils';
+import { useDaoTokenBalances } from '@/lib/dao-hooks';
 import { useDaoData } from '@/hooks/useDaoData';
 import { useCurrentDao } from '@/hooks/useCurrentDao';
-import { getNetworkToken } from './fieldHelpers';
 
 export const RequestNativeToken = (
   props: Buildable<{ amtId?: string; addressId?: string; safeAddressId?: string }>
@@ -17,11 +17,24 @@ export const RequestNativeToken = (
   const { dao } = useDaoData();
 
   const safeAddress = watch(safeAddressId);
+  const selectedSafeAddress = safeAddress || dao?.safeAddress;
+  const { tokens } = useDaoTokenBalances({
+    chainid: daoChain,
+    safeAddress: selectedSafeAddress,
+  });
 
   const networkTokenData = useMemo(() => {
-    if (!dao || !isValidNetwork(daoChain)) return null;
-    return getNetworkToken(dao as any, daoChain, safeAddress);
-  }, [dao, daoChain, safeAddress]);
+    if (!tokens || !isValidNetwork(daoChain)) return null;
+    const nativeToken = tokens.find((token) => !token.token);
+    if (!nativeToken) return null;
+
+    return {
+      daoBalance: nativeToken.balance,
+      decimals: 18,
+      symbol: nativeToken.token?.symbol,
+      name: nativeToken.token?.name,
+    };
+  }, [tokens, daoChain]);
 
   const displayBalance = useMemo(() => {
     if (!networkTokenData || BigInt(networkTokenData.daoBalance) === BigInt(0)) return '0';

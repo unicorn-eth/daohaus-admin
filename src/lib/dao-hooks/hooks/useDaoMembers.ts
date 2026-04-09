@@ -18,7 +18,7 @@ export const useDaoMembers = ({
   chainid?: string;
   daoid?: string;
   queryOptions?: SubgraphQueryOrderPaginationOptions;
-}) => {
+} = {}) => {
   const hookContext = useContext(DaoHooksContext);
 
   if (!hookContext || !hookContext.config.graphKey) {

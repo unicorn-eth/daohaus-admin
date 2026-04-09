@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { ParXs } from '@/lib/ui';
-import { PROPOSAL_TYPE_WARNINGS } from '@/lib/utils';
-import { generateExplorerLink } from '@/lib/keychain-utils';
-import type { ValidNetwork } from '@/lib/keychain-utils';
+import { Link, ParXs } from "@/lib/ui";
+import { PROPOSAL_TYPE_WARNINGS } from "@/lib/utils";
+import { generateExplorerLink } from "@/lib/keychain-utils";
+import type { ValidNetwork } from "@/lib/keychain-utils";
 
 import {
   IconContainer,
@@ -12,8 +12,8 @@ import {
   StyledParXs,
   WarningContainer,
   WarningIcon,
-} from './ProposalActionData.styles';
-import type { ProposalActionConfig } from './ProposalActionData';
+} from "./ProposalActionData.styles";
+import type { ProposalActionConfig } from "./ProposalActionData";
 
 type ProposalWarningProps = {
   proposalType?: string;
@@ -48,10 +48,19 @@ export const ProposalWarning = ({
   if (!hasWarning) return null;
 
   const explorerUrl =
-    txHash && generateExplorerLink({ chainId: daoChain as ValidNetwork, address: txHash, type: 'tx' });
+    txHash &&
+    generateExplorerLink({
+      chainId: daoChain as ValidNetwork,
+      address: txHash,
+      type: "tx",
+    });
 
   return (
-    <WarningContainer className="container" $error={hasError} $warning={!!hasWarning}>
+    <WarningContainer
+      className="container"
+      $error={hasError}
+      $warning={!!hasWarning}
+    >
       <IconContainer>
         <WarningIcon />
       </IconContainer>
@@ -62,9 +71,9 @@ export const ProposalWarning = ({
         {(decodeError || hasError) && explorerUrl && (
           <>
             <Spacer />
-            <a href={explorerUrl} target="_blank" rel="noopener noreferrer">
+            <Link href={explorerUrl} target="_blank" rel="noopener noreferrer">
               <ParXs>View Details</ParXs>
-            </a>
+            </Link>
           </>
         )}
       </MessageContainer>

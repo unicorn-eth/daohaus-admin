@@ -9,34 +9,34 @@ import { NETWORK_TOKEN_ETH_ADDRESS } from '@/lib/utils';
 import type { TokenBalance } from '@/lib/utils';
 import { useCurrentDao } from '@/hooks/useCurrentDao';
 import { useConnectedMember } from '@/hooks/useConnectedMember';
-import { useDao } from '@/lib/dao-hooks';
+import { useDao, useDaoTokenBalances } from '@/lib/dao-hooks';
 import { AppFieldLookup } from '@/legos/legoConfig';
 
 export const RageQuit = () => {
   const { daoChain, daoId } = useCurrentDao();
   const { dao, isLoading } = useDao({ chainid: daoChain, daoid: daoId });
   const { connectedMember } = useConnectedMember();
+  const { tokens } = useDaoTokenBalances({
+    chainid: daoChain,
+    safeAddress: dao?.safeAddress,
+  });
   const queryClient = useQueryClient();
 
   const defaultFields = useMemo(() => {
-    if (!connectedMember || !dao) return undefined;
-
-    const treasury = dao.vaults.find((v) => dao.safeAddress === v.safeAddress);
+    if (!connectedMember || !dao || !tokens) return undefined;
 
     return {
       to: connectedMember.memberAddress,
-      tokens:
-        treasury &&
-        sortTokensForRageQuit(
-          (treasury.tokenBalances ?? [])
-            .filter((token: TokenBalance) => Number(token.balance) > 0)
-            .map(
-              (token: TokenBalance) =>
-                token.tokenAddress || NETWORK_TOKEN_ETH_ADDRESS
-            )
-        ),
+      tokens: sortTokensForRageQuit(
+        tokens
+          .filter((token: TokenBalance) => Number(token.balance) > 0)
+          .map(
+            (token: TokenBalance) =>
+              token.tokenAddress || NETWORK_TOKEN_ETH_ADDRESS
+          )
+      ),
     };
-  }, [connectedMember, dao]);
+  }, [connectedMember, dao, tokens]);
 
   const onFormComplete = () => {
     queryClient.invalidateQueries({ queryKey: ['get-dao'] });

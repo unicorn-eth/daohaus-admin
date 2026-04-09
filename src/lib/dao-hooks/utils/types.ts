@@ -72,7 +72,7 @@ export type VaultItem = {
   id: string;
   createdAt: string;
   active: string;
-  ragequittable: string;
+  ragequittable: boolean;
   name: string;
   safeAddress: string;
   /** Token balances enriched from Sequence indexer — optional, not present in raw subgraph data */

@@ -47,7 +47,10 @@ export const ShamanDeluxe = (
     <DeluxeBox>
       {oldShamanLevel != null && (
         <DataSm>
-          Current Shaman Level: <Secondary>{SHAMAN_PERMISSIONS[Number(oldShamanLevel)]}</Secondary>
+          Current Shaman Level:{" "}
+          <Secondary>
+            {SHAMAN_PERMISSIONS[Number(oldShamanLevel)]?.displayName}
+          </Secondary>
         </DataSm>
       )}
       <ShamanPermission {...props} id={id} rules={newRules} />

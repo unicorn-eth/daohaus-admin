@@ -5,6 +5,7 @@ import {
   handleBaseUnits, ignoreEmptyVal, toWholeUnits, truncValue, ValidateField,
 } from '@/lib/utils';
 import { isValidNetwork } from '@/lib/keychain-utils';
+import { useDaoTokenBalances } from '@/lib/dao-hooks';
 import { Buildable, Button, WrappedInputSelect } from '@/lib/ui';
 import { useDaoData } from '@/hooks/useDaoData';
 import { useCurrentDao } from '@/hooks/useCurrentDao';
@@ -20,21 +21,22 @@ export const RequestERC20 = (
 
   const paymentTokenAddr = watch(addressId);
   const safeAddress = watch(safeAddressId);
+  const selectedSafeAddress = safeAddress || dao?.safeAddress;
+  const { tokens } = useDaoTokenBalances({
+    chainid: daoChain,
+    safeAddress: selectedSafeAddress,
+  });
 
   useEffect(() => {
     if (paymentTokenAddr) setValue(amtId, '0');
   }, [paymentTokenAddr, setValue, amtId]);
 
   const erc20s = useMemo(() => {
-    if (dao && isValidNetwork(daoChain)) {
-      const selectedSafe = dao.vaults.find((v) => {
-        if (!safeAddress) return v.safeAddress === dao.safeAddress;
-        return v.safeAddress === safeAddress;
-      });
-      return selectedSafe && getErc20s(selectedSafe as any);
+    if (tokens && isValidNetwork(daoChain)) {
+      return getErc20s({ tokenBalances: tokens });
     }
     return null;
-  }, [dao, daoChain, safeAddress]);
+  }, [tokens, daoChain]);
 
   const selectOptions = useMemo(() => {
     if (!erc20s) return;

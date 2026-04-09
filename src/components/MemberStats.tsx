@@ -81,11 +81,11 @@ const Td = styled.td`
   vertical-align: middle;
 `;
 
-const VoteIcon = styled.span<{ approved: boolean }>`
+const VoteIcon = styled.span<{ $approved: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: ${({ approved }) => (approved ? "#4ade80" : "#f87171")};
+  color: ${({ $approved }) => ($approved ? "#4ade80" : "#f87171")};
 `;
 
 const TxLink = styled(Link)`
@@ -208,7 +208,7 @@ export const MemberStats = ({
               {votes.map((vote) => (
                 <tr key={vote.txHash}>
                   <Td>
-                    <VoteIcon approved={vote.approved}>
+                    <VoteIcon $approved={vote.approved}>
                       {vote.approved ? (
                         <>
                           <CheckCircle size={14} /> Yes

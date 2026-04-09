@@ -14,10 +14,10 @@ import {
 import { useConnectedMember } from '@/hooks/useConnectedMember';
 import { useCurrentDao } from '@/hooks/useCurrentDao';
 import { useDaoData } from '@/hooks/useDaoData';
+import { useDaoTokenBalances } from '@/lib/dao-hooks';
 import { CheckboxProps, CheckedState } from '@radix-ui/react-checkbox';
 import styled from 'styled-components';
 import type { TokenBalance } from '@/lib/dao-hooks';
-import type { VaultItem } from '@/lib/dao-hooks';
 
 import { sortTokensForRageQuit } from './fieldHelpers';
 
@@ -51,18 +51,13 @@ export const RagequitTokenList = (props: Buildable<Field>) => {
     if (!daoChain) return null;
     return getNetwork(daoChain);
   }, [daoChain]);
-
-  const treasury: (VaultItem & { tokenBalances?: TokenBalance[] }) | undefined = useMemo(() => {
-    if (dao) {
-      return (dao.vaults.find((v) => v.safeAddress === dao.safeAddress) || undefined) as any;
-    }
-    return undefined;
-  }, [dao]);
-
-  const tokenBalances = treasury?.tokenBalances || [];
+  const { tokens: tokenBalances = [] } = useDaoTokenBalances({
+    chainid: daoChain,
+    safeAddress: dao?.safeAddress,
+  });
 
   const tokenTable = useMemo((): TokenTable | null => {
-    if (!dao || !networkData || !connectedMember || !treasury) return null;
+    if (!dao || !networkData || !connectedMember) return null;
     return tokenBalances
       .filter((token) => Number(token.balance) > 0)
       .reduce(
@@ -108,7 +103,7 @@ export const RagequitTokenList = (props: Buildable<Field>) => {
         },
         { tokenCheckboxes: [], amounts: [] }
       );
-  }, [dao, networkData, connectedMember, sharesToBurn, lootToBurn, id, tokens, treasury, tokenBalances, setValue]);
+  }, [dao, networkData, connectedMember, sharesToBurn, lootToBurn, id, tokens, tokenBalances, setValue]);
 
   const handleSelectAll = (checked: CheckedState) => {
     if (checked) {
