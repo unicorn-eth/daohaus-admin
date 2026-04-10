@@ -2,7 +2,12 @@
   "name": "haus-admin",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "npm@11.7.0",
   "type": "module",
+  "engines": {
+    "node": "20.19.5",
+    "npm": "11.7.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
