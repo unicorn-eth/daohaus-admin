@@ -299,7 +299,7 @@ const Action = ({ actionId, index }: { actionId: string; index: number; onDelete
 
 type IAction = { id: string };
 
-export const MultisendActions = (props: Buildable<Field>) => {
+export const MultisendActions = (_props: Buildable<Field>) => {
   const location = useLocation();
   const { dao } = useDaoData();
   const [actions, setActions] = useState<Array<IAction>>([{ id: crypto.randomUUID().substring(0, 8) }]);

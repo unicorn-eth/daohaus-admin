@@ -17,11 +17,10 @@ import type { ValidNetwork } from "@/lib/keychain-utils";
 import {
   charLimit,
   formatShortDateTimeFromSeconds,
-  getProposalStatus,
   PROPOSAL_TYPE_LABELS,
   getProposalTypeLabel,
 } from "@/lib/utils";
-import { ProposalActions } from "./ProposalActions";
+import { ProposalActions } from "./ProposalActions/ProposalActions";
 
 const CardContainer = styled(Card)`
   display: flex;
@@ -100,7 +99,6 @@ export const ProposalCard = ({
   daoId,
 }: ProposalCardProps) => {
   const theme = useTheme();
-  const status = getProposalStatus(proposal);
   const typeLabel = getProposalTypeLabel(
     proposal.proposalType,
     PROPOSAL_TYPE_LABELS
@@ -151,7 +149,7 @@ export const ProposalCard = ({
       </LeftCard>
 
       <RightCard>
-        <ProposalActions proposal={proposal} status={status} />
+        <ProposalActions proposal={proposal} daoChain={daoChain} daoId={daoId} />
       </RightCard>
     </CardContainer>
   );

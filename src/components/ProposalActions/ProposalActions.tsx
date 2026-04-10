@@ -5,9 +5,15 @@ import { PROPOSAL_STATUS, getProposalStatus } from '@/lib/utils';
 import type { ProposalItem } from '@/lib/dao-hooks';
 
 import { ActionTemplate } from './ActionPrimitives';
-import { VotingPeriod } from './VotingPeriod';
-import { Unsponsored } from './Unsponsored';
+import { ActionFailed } from './ActionFailed';
+import { Cancelled } from './Cancelled';
+import { Expired } from './Expired';
+import { Failed } from './Failed';
+import { GracePeriod } from './GracePeriod';
+import { Passed } from './Passed';
 import { ReadyForProcessing } from './ReadyForProcessing';
+import { Unsponsored } from './Unsponsored';
+import { VotingPeriod } from './VotingPeriod';
 
 const ActionBox = styled.div`
   display: flex;
@@ -34,7 +40,15 @@ export const ProposalActions = ({
   if (status === PROPOSAL_STATUS.cancelled) {
     return (
       <ActionBox>
-        <ActionTemplate proposal={proposal} statusDisplay="Cancelled" />
+        <Cancelled proposal={proposal} />
+      </ActionBox>
+    );
+  }
+
+  if (status === PROPOSAL_STATUS.unsponsored) {
+    return (
+      <ActionBox>
+        <Unsponsored proposal={proposal} daoChain={daoChain} daoId={daoId} />
       </ActionBox>
     );
   }
@@ -50,7 +64,7 @@ export const ProposalActions = ({
   if (status === PROPOSAL_STATUS.grace) {
     return (
       <ActionBox>
-        <ActionTemplate proposal={proposal} statusDisplay="In Grace Period" />
+        <GracePeriod proposal={proposal} />
       </ActionBox>
     );
   }
@@ -66,7 +80,7 @@ export const ProposalActions = ({
   if (status === PROPOSAL_STATUS.passed) {
     return (
       <ActionBox>
-        <ActionTemplate proposal={proposal} statusDisplay="Passed" />
+        <Passed proposal={proposal} />
       </ActionBox>
     );
   }
@@ -74,7 +88,7 @@ export const ProposalActions = ({
   if (status === PROPOSAL_STATUS.failed) {
     return (
       <ActionBox>
-        <ActionTemplate proposal={proposal} statusDisplay="Failed" />
+        <Failed proposal={proposal} />
       </ActionBox>
     );
   }
@@ -82,7 +96,7 @@ export const ProposalActions = ({
   if (status === PROPOSAL_STATUS.actionFailed) {
     return (
       <ActionBox>
-        <ActionTemplate proposal={proposal} statusDisplay="Execution Failed" />
+        <ActionFailed proposal={proposal} daoChain={daoChain} />
       </ActionBox>
     );
   }
@@ -90,15 +104,7 @@ export const ProposalActions = ({
   if (status === PROPOSAL_STATUS.expired) {
     return (
       <ActionBox>
-        <ActionTemplate proposal={proposal} statusDisplay="Expired" />
-      </ActionBox>
-    );
-  }
-
-  if (status === PROPOSAL_STATUS.unsponsored) {
-    return (
-      <ActionBox>
-        <Unsponsored proposal={proposal} daoChain={daoChain} daoId={daoId} />
+        <Expired proposal={proposal} />
       </ActionBox>
     );
   }

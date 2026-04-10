@@ -2,21 +2,25 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 
-import { BiColumnLayout, Card, H5, Loading, ParMd, SingleColumnLayout, widthQuery } from "@/lib/ui";
+import {
+  BiColumnLayout,
+  Card,
+  Loading,
+  ParMd,
+  SingleColumnLayout,
+  widthQuery,
+} from "@/lib/ui";
 import { useProposal } from "@/lib/dao-hooks";
 import { useCurrentDao } from "@/hooks/useCurrentDao";
-import {
-  getProposalTypeLabel,
-  PROPOSAL_TYPE_LABELS,
-} from "@/lib/utils";
+import { getProposalTypeLabel, PROPOSAL_TYPE_LABELS } from "@/lib/utils";
 import { deepDecodeProposalActions } from "@/lib/tx-builder/utils/deepDecoding";
 import type { DeepDecodedMultiTX } from "@/lib/tx-builder/utils/decoding";
 import { isValidNetwork } from "@/lib/keychain-utils";
+import { CancelProposal } from "@/components/CancelProposal";
 import { ProposalDetailCard } from "@/components/ProposalDetailCard";
 import { ProposalActions } from "@/components/ProposalActions/ProposalActions";
 import { ProposalActionData } from "@/components/ProposalActionData/ProposalActionData";
 import { ProposalHistory } from "@/components/ProposalHistory";
-import { VoteList } from "@/components/VoteList";
 
 const RightCard = styled(Card)`
   display: flex;
@@ -44,7 +48,7 @@ export const Proposal = () => {
   const { daoChain, daoId } = useCurrentDao();
   const { proposalId } = useParams<{ proposalId: string }>();
 
-  const { proposal, isLoading, isError } = useProposal({
+  const { proposal, isLoading, isError, refetch } = useProposal({
     chainid: daoChain,
     daoid: daoId,
     proposalid: proposalId,
@@ -55,17 +59,30 @@ export const Proposal = () => {
 
   useEffect(() => {
     if (!proposal?.proposalData || !isValidNetwork(daoChain)) return;
-    if (proposal.proposalData === '0x' || proposal.proposalData === '0x0') return;
+    if (proposal.proposalData === "0x" || proposal.proposalData === "0x0")
+      return;
 
-    setActionData(null);
-    setDecodeError(false);
-
+    let cancelled = false;
     deepDecodeProposalActions({
       chainId: daoChain,
       actionData: proposal.proposalData,
     })
-      .then((decoded) => setActionData(decoded))
-      .catch(() => setDecodeError(true));
+      .then((decoded) => {
+        if (!cancelled) {
+          setActionData(decoded);
+          setDecodeError(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setActionData(null);
+          setDecodeError(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [proposal?.proposalData, daoChain]);
 
   if (isLoading) {
@@ -93,6 +110,7 @@ export const Proposal = () => {
     <BiColumnLayout
       title={proposal.title || "(No Title)"}
       subtitle={`${proposal.proposalId} | ${typeLabel}`}
+      actions={<CancelProposal proposal={proposal} onSuccess={refetch} />}
       left={
         <div>
           <ProposalDetailCard
@@ -118,8 +136,6 @@ export const Proposal = () => {
               daoId={daoId}
             />
             <Divider />
-            <H5>Votes</H5>
-            <VoteList proposal={proposal} />
           </RightCard>
           <ProposalHistory proposal={proposal} daoChain={daoChain} />
         </div>

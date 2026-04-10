@@ -28,11 +28,14 @@ type EIP712TypedData = {
   message: Record<string, unknown>;
 };
 
-export enum WalletConnectVersion {
-  NONE,
-  V1,
-  V2,
-}
+export const WalletConnectVersion = {
+  NONE: 0,
+  V1: 1,
+  V2: 2,
+} as const;
+
+export type WalletConnectVersion =
+  (typeof WalletConnectVersion)[keyof typeof WalletConnectVersion];
 
 // WalletConnect URI follows eip-1328 standard
 export const getWalletConnectVersion = (uri: string): WalletConnectVersion => {

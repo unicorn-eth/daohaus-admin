@@ -1,4 +1,4 @@
-export type ProposalStatus =
+export type ProposalStatusLabel =
   | 'Unsponsored'
   | 'Voting'
   | 'Grace'
@@ -26,7 +26,7 @@ export const ProposalTypeIds = {
 } as const;
 export type ProposalTypeIds = (typeof ProposalTypeIds)[keyof typeof ProposalTypeIds];
 
-export const PROPOSAL_STATUS: { [index: string]: ProposalStatus } = {
+export const PROPOSAL_STATUS: { [index: string]: ProposalStatusLabel } = {
   unsponsored: 'Unsponsored',
   voting: 'Voting',
   grace: 'Grace',

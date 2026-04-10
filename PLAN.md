@@ -18,9 +18,10 @@
 6. [Phase 3 — Shared Libraries](#phase-3--shared-libraries)
 7. [Phase 4 — Pages: Read (Data Display)](#phase-4--pages-read-data-display)
 8. [Phase 5 — Pages: Write (Transactions & Forms)](#phase-5--pages-write-transactions--forms)
-9. [Phase 6 — Polish & Modernization](#phase-6--polish--modernization)
-10. [Open Questions](#open-questions)
-11. [Modernization Issues Identified](#modernization-issues-identified)
+9. [Phase 5b — Summon App Migration](#phase-5b--summon-app-migration)
+10. [Phase 6 — Polish & Modernization](#phase-6--polish--modernization)
+11. [Open Questions](#open-questions)
+12. [Modernization Issues Identified](#modernization-issues-identified)
 
 ---
 
@@ -974,6 +975,142 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
 ---
 
 **Testable:** Each operation tested individually on Sepolia testnet. Verify: transaction signs and submits, toast lifecycle fires (pending → success/error), subgraph polling triggers refetch, UI updates to reflect new state. For Op 14 (Tx Builder): verify ABI fetch works via Etherscan v2, a simple ETH transfer multicall proposal can be created. For Op 15: verify action data decodes correctly on known proposal types (ISSUE, TRANSFER_ERC20, MULTICALL).
+
+---
+
+## Phase 5b — Summon App Migration
+
+**Goal:** Bring `monorepo/apps/summon` into `haus-admin` as a first-class route at `/summon`, reusing the ported `ui`, `tx-builder`, `keychain-utils`, `abis`, and app shell wherever possible.
+
+### Effort Assessment
+
+**Overall size:** Medium  
+**Estimated effort:** ~3 to 5 focused engineering days, depending on how much of the old summon-specific helper code we choose to copy versus rewrite to match the newer `haus-admin` architecture.
+
+**Why this is medium and not large:**
+- The summon app is a single flow with a small number of components and a simple route-level state machine.
+- Most visual primitives already exist in `haus-admin/src/lib/ui/`.
+- The transaction layer, ABI data, contract keychains, and explorer utilities already exist locally in `haus-admin`.
+
+**What makes it non-trivial:**
+- The old summon app depends on `@daohaus/connect` (`useDHConnect`, `DaoHausNav`, `ExplorerLink`, `connectWallet`) and `@daohaus/contract-utils` (`assembleTxArgs`, `SummonParams`), neither of which are currently present as local APIs in `haus-admin`.
+- The summon success/loading/error flow still assumes the legacy app shell and hard-codes a link back to `admin.daohaus.club`.
+- We need to decide whether `/summon` lives inside the existing `AppLayout`/`HomeContainer` shell or intentionally keeps a distinct marketing-style layout.
+
+### Reuse Assessment
+
+**Can reuse directly or with light adaptation:**
+- `src/lib/ui/` primitives used by summon: `Button`, `Divider`, `FormSegment`, `SplitColumn`, `WrappedInput`, `WrappedTextArea`, `WrappedSwitch`, `TimePicker`, `AddressDisplay`, typography, breakpoint hooks, toast hooks
+- `src/lib/tx-builder/` for firing the summon transaction and polling for indexed results
+- `src/lib/keychain-utils/` for network validation, native symbol lookup, contract addresses, and explorer links
+- `src/lib/abis/` for `BAAL_ADV_TOKEN_SUMMONER`
+- Existing wallet/providers in `src/main.tsx`
+- Existing app navigation/footer patterns in `src/layout/AppLayout.tsx`
+
+**Needs to be added or adapted:**
+- Summon-specific transaction argument assembly (`assembleTxArgs`, `SummonParams`)
+- Summon route/page components and local assets
+- A RainbowKit-based replacement for `useDHConnect().connectWallet`
+- A modernized success CTA that links to the local route `/molochv3/:daochain/:daoid`
+
+### Plan
+
+#### 5b.1 Route, Layout, and App Shell
+
+- Add a new route in [router.tsx](/home/skuhl/Documents/ody/haus/haus-admin/src/router.tsx) at `/summon`
+- Decide layout strategy:
+  - Preferred: render summon inside the existing `HomeContainer` / `AppLayout` shell for visual consistency and less duplicated nav/footer code
+  - Alternative: keep a dedicated centered layout if we want summon to feel more campaign/landing-page-like
+- Create a route-level page such as `src/pages/Summon.tsx` that owns the four summon states: `idle`, `loading`, `success`, `error`
+
+#### 5b.2 Port Summon UI Components
+
+- Port these files from `monorepo/apps/summon/src/` into `haus-admin/src/` with import rewrites to local libs:
+  - `layouts/SummonerForm.tsx`
+  - `layouts/StakeTokenSegment.tsx`
+  - `layouts/TimingSegment.tsx`
+  - `layouts/AdvancedSegment.tsx`
+  - `layouts/MemberSegment.tsx`
+  - `layouts/ShamanSegment.tsx`
+  - `layouts/SummonerLoading.tsx`
+  - `layouts/SummonerSuccess.tsx`
+  - `layouts/SummonError.tsx`
+  - `layouts/FormLayouts.tsx`
+  - `components/ConnectBox/ConnectBox.tsx`
+  - `components/HausBlockLoading/HausBlockLoading.tsx`
+  - `utils/common.ts`
+  - `utils/formKeys.ts`
+- Copy summon-only assets (`hausBlock.svg`, `hausBlockAnimated.svg`) into `haus-admin/src/assets/` or `src/lib/ui/assets/` depending on whether we expect broader reuse
+- Keep this code local to the app rather than pushing it into `src/lib/` unless a second flow starts reusing it
+
+#### 5b.3 Replace Legacy Connect Dependencies
+
+- Remove `@daohaus/connect` usage from summon components
+- Replace `useDHConnect()` with the current wallet stack:
+  - `useAccount` for `isConnected` and address
+  - `useChainId` or app chain helpers for the active chain
+  - RainbowKit modal controls for the “Connect” action
+- Replace `DaoHausNav` usage with the current app header/navigation from `AppLayout`
+- Replace `ExplorerLink` with local explorer URL generation from `src/lib/keychain-utils/`
+
+**Important adaptation:** the old summon flow uses the connected wallet chain directly. We should preserve that behavior, but gate submission to supported networks via `isValidNetwork`.
+
+#### 5b.4 Add Summon Transaction Utils Locally
+
+- Create local summon utilities in `haus-admin`, likely:
+  - `src/features/summon/utils/summonTx.ts`
+  - `src/features/summon/utils/summonForm.ts`
+- Port the old summon transaction config from `monorepo/apps/summon/src/utils/summonlegos.ts`
+- Port or inline the needed pieces from `monorepo/libs/contract-utils/src/lib/summon-tx-utils.ts`:
+  - `SummonParams`
+  - `assembleTxArgs`
+  - any small helper encoders it depends on
+
+**Recommendation:** do not copy the whole `contract-utils` package just for summon. Pull over only the summon-specific encoding helpers unless we already expect more direct contract-utils reuse elsewhere.
+
+#### 5b.5 Integrate With Local TX Builder
+
+- Wire the summon page through local `TXBuilder` / `useTxBuilder`
+- Confirm the current tx-builder still supports the lifecycle hooks summon depends on:
+  - `onTxHash`
+  - `onPollSuccess`
+  - `onTxError`
+  - `onPollError`
+- Validate that the poll result still exposes the summoned DAO address at `result?.data?.transaction?.daoAddress`
+- If the poll payload has drifted in `haus-admin`, normalize it in one place rather than scattering conditional access through the UI
+
+#### 5b.6 Modernize Success/Error Behavior
+
+- Update the success CTA to route into the local app:
+  - `/molochv3/:daochain/:daoid`
+- Update the error screen copy and explorer link behavior:
+  - loading state should link to transaction hash as a tx URL
+  - error state should only link to a DAO address if one actually exists
+- Replace legacy external hard-coded links with local routes where appropriate
+
+#### 5b.7 Validation and Network Review
+
+- Verify supported summon networks against `CONTRACT_KEYCHAINS.V3_FACTORY_ADV_TOKEN`
+- Confirm the active wagmi chain IDs and hex route values line up with the rest of the app
+- Manually test on at least one low-cost supported test network before treating mainnet/L2 production summon as ready
+
+### Risks / Open Decisions
+
+1. **Summon arg assembly source of truth:** the main technical question is whether we keep summon encoding helpers app-local or formally port a slim `contract-utils` subset into `src/lib/`.
+2. **Layout choice:** placing `/summon` inside the existing shell reduces work and improves consistency; preserving a custom standalone layout gives more visual freedom but duplicates chrome.
+3. **Poll result shape:** if the tx-builder/subgraph polling contract changed since the old summon app, success detection may need a small adapter.
+4. **Network support scope:** summon should probably launch only on networks where `V3_FACTORY_ADV_TOKEN` and the corresponding indexing flow are confirmed healthy.
+
+### Suggested Build Order
+
+1. Add the `/summon` route and a placeholder page inside the current app shell.
+2. Port the presentational summon segments and assets.
+3. Replace legacy connect calls with RainbowKit/wagmi equivalents.
+4. Port the summon arg assembly helpers and transaction config.
+5. Wire `useTxBuilder` lifecycle handling and success/error states.
+6. Test end-to-end on a supported test network.
+
+**Testable:** `/summon` renders inside `haus-admin`, validates form input, prompts wallet connection correctly, submits the summon transaction, shows loading and success/error states, and links the user into the newly created DAO route in the same app.
 
 ---
 

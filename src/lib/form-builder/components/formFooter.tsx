@@ -7,17 +7,19 @@ import { Button, ParSm, Loading, Theme } from '@/lib/ui';
 import { generateExplorerLink } from '@/lib/keychain-utils';
 import { ValidNetwork } from '@/lib/keychain-utils';
 
-enum StatusMsg {
-  Compile = 'Compiling Transaction Data',
-  Request = 'Requesting Signature',
-  Await = 'Transaction Submitted',
-  TxErr = 'Transaction Error',
-  TxSuccess = 'Transaction Success',
-  PollStart = 'Syncing TX (Subgraph)',
-  PollSuccess = 'Success: TX Confirmed!',
-  PollError = 'Sync Error (Subgraph)',
-  NoContext = 'Missing TXBuilder Context',
-}
+const StatusMsg = {
+  Compile: 'Compiling Transaction Data',
+  Request: 'Requesting Signature',
+  Await: 'Transaction Submitted',
+  TxErr: 'Transaction Error',
+  TxSuccess: 'Transaction Success',
+  PollStart: 'Syncing TX (Subgraph)',
+  PollSuccess: 'Success: TX Confirmed!',
+  PollError: 'Sync Error (Subgraph)',
+  NoContext: 'Missing TXBuilder Context',
+} as const;
+
+type StatusMsg = (typeof StatusMsg)[keyof typeof StatusMsg];
 
 const FooterBox = styled.div`
   a {

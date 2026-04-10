@@ -205,21 +205,21 @@ const buildUnsponsoredElements = ({
   buildCompletedFuture({ proposal, status }),
 ];
 
-const buildGraceFuture = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>): ProposalHistoryElement => ({
+const buildGraceFuture = ({ proposal }: ElementBuildArgs): ProposalHistoryElement => ({
   title: 'Grace Period',
   text: `Grace will last ${formatPeriods(proposal.gracePeriod)}`,
   active: false,
   canExpand: false,
 });
 
-const buildGracePast = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>): ProposalHistoryElement => ({
+const buildGracePast = ({ proposal }: ElementBuildArgs): ProposalHistoryElement => ({
   title: 'Grace Period',
   active: false,
   text: formatDateTimeFromSeconds(proposal.graceEnds),
   canExpand: false,
 });
 
-const buildVotingPast = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>): ProposalHistoryElement => ({
+const buildVotingPast = ({ proposal }: ElementBuildArgs): ProposalHistoryElement => ({
   title: 'Voting Complete',
   active: false,
   text: `${formatValueTo({
@@ -235,7 +235,7 @@ const buildVotingPast = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>): Prop
   showVotesButton: true,
 });
 
-const buildCompletedFuture = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>): ProposalHistoryElement => ({
+const buildCompletedFuture = ({ proposal }: ElementBuildArgs): ProposalHistoryElement => ({
   title: 'Proposal Completion',
   text:
     proposal.expiration !== '0'
@@ -245,7 +245,7 @@ const buildCompletedFuture = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>):
   canExpand: false,
 });
 
-const buildSponsored = ({ proposal }: Pick<ElementBuildArgs, 'proposal'>): ProposalHistoryElement => ({
+const buildSponsored = ({ proposal }: ElementBuildArgs): ProposalHistoryElement => ({
   title: 'Sponsored',
   active: false,
   text: formatDateTimeFromSeconds(proposal.sponsorTxAt),

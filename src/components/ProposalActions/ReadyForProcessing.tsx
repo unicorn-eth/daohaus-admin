@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAccount, useChainId } from 'wagmi';
+import { useChainId } from 'wagmi';
 import styled from 'styled-components';
 
 import { GatedButton, useBreakpoint, useToast, widthQuery } from '@/lib/ui';

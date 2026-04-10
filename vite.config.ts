@@ -102,6 +102,7 @@ export default defineConfig({
       '@/components': resolve(__dirname, 'src/components'),
       '@/pages': resolve(__dirname, 'src/pages'),
       '@/hooks': resolve(__dirname, 'src/hooks'),
+      '@/assets': resolve(__dirname, 'src/assets'),
       '@/utils': resolve(__dirname, 'src/utils'),
       '@/layout': resolve(__dirname, 'src/layout'),
       '@/types': resolve(__dirname, 'src/types/index.ts'),

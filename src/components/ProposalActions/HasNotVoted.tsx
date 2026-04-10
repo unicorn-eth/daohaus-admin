@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import { useAccount, useChainId } from 'wagmi';
+import { useChainId } from 'wagmi';
 
 import { ParMd, TintSecondary, useToast } from '@/lib/ui';
 import { formatShares, handleErrorMessage, TXLego } from '@/lib/utils';
@@ -11,23 +11,23 @@ import { ACTION_TX } from './legos';
 import { ActionTemplate, VoteBox, VoteDownButton, VoteUpButton } from './ActionPrimitives';
 import { VoteBar } from '@/components/VoteBar';
 
-enum Vote {
-  Yes = 'yes',
-  No = 'no',
-}
+const Vote = {
+  Yes: 'yes',
+  No: 'no',
+} as const;
+
+type Vote = (typeof Vote)[keyof typeof Vote];
 
 export const HasNotVoted = ({
   proposal,
   readableTime,
   daoChain,
-  daoId,
 }: {
   proposal: ProposalItem;
   daoChain: string;
   daoId: string;
   readableTime?: string;
 }) => {
-  const { address } = useAccount();
   const wagmiChainId = useChainId();
   const chainId = wagmiChainId ? `0x${wagmiChainId.toString(16)}` : undefined;
 

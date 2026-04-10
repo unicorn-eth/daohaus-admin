@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { Buildable, Button, Field, FieldWrapper } from '@/lib/ui';
 import { useFormContext } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
@@ -10,7 +10,8 @@ export const EpochDatePicker = (props: Buildable<Field>) => {
   const { setValue } = useFormContext();
   const [startDate, setStartDate] = useState(new Date());
 
-  const handleChange = (date: Date) => {
+  const handleChange = (date: Date | null) => {
+    if (!date) return;
     setStartDate(date);
     setValue(props.id, +date / 1000);
   };
@@ -60,7 +61,7 @@ export const EpochDatePicker = (props: Buildable<Field>) => {
       <DatePicker
         id={props.id}
         selected={startDate}
-        onChange={(date: Date) => handleChange(date)}
+        onChange={(date: Date | null) => handleChange(date)}
         showTimeSelect
         customInput={<CustomInput />}
         wrapperClassName={props?.className}

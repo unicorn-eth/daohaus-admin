@@ -19,7 +19,7 @@ export const ManageDelegate = ({
   defaultMember,
 }: ManageDelegateProps) => {
   const { connectedMember } = useConnectedMember();
-  const { daoChain: ctxChain, daoId: ctxDaoId } = useCurrentDao();
+  const { daoChain: ctxChain } = useCurrentDao();
   const queryClient = useQueryClient();
 
   const defaultValues = useMemo(() => {

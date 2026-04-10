@@ -22,17 +22,19 @@ type BuilderProps = {
   submitButtonText?: string;
 };
 
-export enum StatusMsg {
-  Compile = 'Compiling Transaction Data',
-  Request = 'Requesting Signature',
-  Await = 'Transaction Submitted',
-  TxErr = 'Transaction Error',
-  TxSuccess = 'Transaction Success',
-  PollStart = 'Syncing TX (Subgraph)',
-  PollSuccess = 'Success: TX Confirmed!',
-  PollError = 'Sync Error (Subgraph)',
-  NoContext = 'Missing TXBuilder Context',
-}
+export const StatusMsg = {
+  Compile: 'Compiling Transaction Data',
+  Request: 'Requesting Signature',
+  Await: 'Transaction Submitted',
+  TxErr: 'Transaction Error',
+  TxSuccess: 'Transaction Success',
+  PollStart: 'Syncing TX (Subgraph)',
+  PollSuccess: 'Success: TX Confirmed!',
+  PollError: 'Sync Error (Subgraph)',
+  NoContext: 'Missing TXBuilder Context',
+} as const;
+
+export type StatusMsg = (typeof StatusMsg)[keyof typeof StatusMsg];
 
 export const FormBuilder = ({
   form,

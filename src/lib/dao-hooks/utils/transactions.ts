@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 
-import { GRAPH_API_KEYS } from '@/lib/keychain-utils';
+import { GRAPH_API_KEYS, ValidNetwork } from '@/lib/keychain-utils';
 import type { IFindQueryResult } from '@/lib/data-fetch-utils';
 import { formatFetchError } from '@/lib/data-fetch-utils';
 
@@ -20,7 +20,7 @@ export const findTransaction = async ({
   txHash,
   graphKey = GRAPH_API_KEYS[chainId] ?? '',
 }: {
-  chainId: string;
+  chainId: ValidNetwork;
   txHash: string;
   graphKey?: string;
 }): Promise<IFindQueryResult<FindTxResult>> => {

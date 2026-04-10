@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { indigoDark } from "@radix-ui/colors";
 import {
   GitFork,
   MessageCircle,
@@ -13,7 +12,6 @@ import {
 import {
   H3,
   ParSm,
-  ParXs,
   DataIndicator,
   Tag,
   ProfileAvatar,
@@ -137,10 +135,6 @@ const LabelledValue = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-`;
-
-const Label = styled(ParXs)`
-  color: ${indigoDark.indigo11};
 `;
 
 // ── Component ────────────────────────────────────────────────────────────────

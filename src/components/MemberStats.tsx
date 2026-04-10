@@ -129,12 +129,9 @@ export const MemberStats = ({
   member,
   totalShares,
   daoChain,
-  daoId,
 }: MemberStatsProps) => {
   const isDelegatingToSelf =
     member.delegatingTo.toLowerCase() === member.memberAddress.toLowerCase();
-
-  const profilePath = `/molochv3/${daoChain}/${daoId}/member/${member.delegatingTo}`;
 
   // votes field may be a single object or array depending on subgraph version
   const votes = Array.isArray(member.votes)

@@ -9,7 +9,7 @@ import { useCurrentDao } from '@/hooks/useCurrentDao';
 import { useDaoData } from '@/hooks/useDaoData';
 import {
   Buildable, Button, Field, FieldWrapper, HighlightInputText,
-  Icon, ParSm, ParMd, Loading, WrappedInput,
+  ParSm, ParMd, Loading, WrappedInput,
 } from '@/lib/ui';
 
 import useWalletConnectV2 from './walletConnectV2';
@@ -17,7 +17,13 @@ import { getWalletConnectVersion, WalletConnectVersion } from './walletConnect';
 
 import WalletConnectLogo from '../../legos/assets/wallet_connect.svg';
 
-enum Status { DISCONNECTED, CONNECTING, CONNECTED }
+const Status = {
+  DISCONNECTED: 0,
+  CONNECTING: 1,
+  CONNECTED: 2,
+} as const;
+
+type Status = (typeof Status)[keyof typeof Status];
 
 const WalletConectContainer = styled.div`
   display: flex;
@@ -63,7 +69,7 @@ export const WalletConnectLink = ({ icon, id, rules, ...props }: Buildable<Field
   } = useWalletConnectV2();
 
   const inputId = 'wcLink';
-  const [connectionStatus, setConnectionStatus] = useState(Status.DISCONNECTED);
+  const [connectionStatus, setConnectionStatus] = useState<Status>(Status.DISCONNECTED);
   const wcLink = watch(inputId);
   const [legacyError, setLegacyError] = useState<string | null>(null);
 

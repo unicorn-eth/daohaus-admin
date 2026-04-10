@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { HomeContainer } from '@/layout/HomeContainer';
 import { DaoContainer } from '@/layout/DaoContainer';
 import { Home } from '@/pages/Home';
+import { Summon } from '@/pages/Summon';
 import { DaoOverview } from '@/pages/DaoOverview';
 import { Proposals } from '@/pages/Proposals';
 import { Proposal } from '@/pages/Proposal';
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
     element: <HomeContainer />,
     children: [
       { index: true, element: <Home /> },
+      { path: 'summon', element: <Summon /> },
     ],
   },
   {

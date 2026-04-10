@@ -24,6 +24,7 @@ import { ActionError, DeepDecodedAction, DeepDecodedMultiTX } from './decoding';
 const { MultiABILoader, SourcifyABILoader } = loaders;
 
 class EtherscanABILoader implements loaders.ABILoader {
+  readonly name = 'EtherscanABILoader';
   chainId: ValidNetwork;
   rpcs: Keychain;
   explorerKeys: Keychain;
@@ -44,6 +45,15 @@ class EtherscanABILoader implements loaders.ABILoader {
     });
     if (!abi?.length) return [];
     return abi;
+  }
+
+  async getContract(address: string) {
+    const abi = await this.loadABI(address);
+    return {
+      abi,
+      name: null,
+      ok: abi.length > 0,
+    };
   }
 }
 

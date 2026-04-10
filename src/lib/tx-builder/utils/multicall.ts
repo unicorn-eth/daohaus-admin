@@ -361,7 +361,6 @@ export const buildMultiCallTX = ({
 export const handleArgEncode = async ({
   arg,
   chainId,
-  safeId,
   localABIs,
   appState,
   rpcs,

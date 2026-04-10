@@ -23,7 +23,6 @@ import { VoteBar } from '@/components/VoteBar';
 export const Unsponsored = ({
   proposal,
   daoChain,
-  daoId,
 }: {
   proposal: ProposalItem;
   daoChain: string;

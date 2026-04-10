@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useAccount } from 'wagmi';
 
 import {
   SingleColumnLayout,

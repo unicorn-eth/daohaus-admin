@@ -8,11 +8,17 @@ import {
   MemberCardExplorerLink,
   MemberCardCopyAddress,
   widthQuery,
+  Link,
 } from "@/lib/ui";
 import type { ProposalItem } from "@/lib/dao-hooks";
+import { HAUS_NETWORK_DATA, isValidNetwork } from "@/lib/keychain-utils";
 import type { ValidNetwork } from "@/lib/keychain-utils";
-import { formatShortDateTimeFromSeconds } from "@/lib/utils";
-import { ProposalTimeline } from "./ProposalTimeline";
+import {
+  dynamicDecimals,
+  formatShortDateTimeFromSeconds,
+  formatValueTo,
+  fromWei,
+} from "@/lib/utils";
 
 const DetailCard = styled(Card)`
   display: flex;
@@ -77,14 +83,14 @@ export const ProposalDetailCard = ({
       )}
 
       {proposal.contentURI && (
-        <a
+        <Link
           href={proposal.contentURI}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: theme.primary.step9, wordBreak: "break-all" }}
         >
-          {proposal.contentURI}
-        </a>
+          More Details
+        </Link>
       )}
 
       <Divider />
@@ -130,11 +136,24 @@ export const ProposalDetailCard = ({
           data={formatShortDateTimeFromSeconds(proposal.createdAt) ?? "—"}
           size="sm"
         />
+
+        {Number(proposal.proposalOffering) > 0 && isValidNetwork(daoChain) && (
+          <DataIndicator
+            label="Proposal Offering"
+            data={formatValueTo({
+              value: fromWei(proposal.proposalOffering),
+              format: "number",
+              unit: HAUS_NETWORK_DATA[daoChain as ValidNetwork]?.symbol,
+              decimals: dynamicDecimals({
+                baseUnits: Number(proposal.proposalOffering),
+              }),
+            })}
+            size="sm"
+          />
+        )}
       </Section>
 
       <Divider />
-
-      <ProposalTimeline proposal={proposal} />
     </DetailCard>
   );
 };

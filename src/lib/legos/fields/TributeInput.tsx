@@ -24,15 +24,17 @@ type TokenData = {
   tokenSymbol: string;
 };
 
-enum TokenFetchStates {
-  Idle = '',
-  Loading = 'Loading Token Data...',
-  NotEthAddress = 'Not a valid Ethereum address',
-  NotValidNetwork = 'Not a valid network',
-  NotConnected = 'Connection Error',
-  Error = 'Error fetching token data',
-  Success = 'Success',
-}
+const TokenFetchStates = {
+  Idle: '',
+  Loading: 'Loading Token Data...',
+  NotEthAddress: 'Not a valid Ethereum address',
+  NotValidNetwork: 'Not a valid network',
+  NotConnected: 'Connection Error',
+  Error: 'Error fetching token data',
+  Success: 'Success',
+} as const;
+
+type TokenFetchStates = (typeof TokenFetchStates)[keyof typeof TokenFetchStates];
 
 const fetchUserERC20 = async ({
   tokenAddress, chainId, userAddress, shouldUpdate,
@@ -86,7 +88,7 @@ export const TributeInput = (props: Buildable<{ addressId?: string; amtId?: stri
   const chainId = wagmiChainId ? `0x${wagmiChainId.toString(16)}` : undefined;
 
   const tokenAddress = useWatch({ name: addressId, control });
-  const [fetchState, setFetchState] = useState(TokenFetchStates.Idle);
+  const [fetchState, setFetchState] = useState<TokenFetchStates>(TokenFetchStates.Idle);
   const [needsApproval, setNeedsApproval] = useState<boolean>(false);
   const [tokenData, setTokenData] = useState<null | TokenData>(null);
 
@@ -141,13 +143,20 @@ export const TributeInput = (props: Buildable<{ addressId?: string; amtId?: stri
   );
 };
 
-enum TxStates { Idle = 'Idle', Loading = 'Loading', Error = 'Error', Success = 'Token Approved!' }
+const TxStates = {
+  Idle: 'Idle',
+  Loading: 'Loading',
+  Error: 'Error',
+  Success: 'Token Approved!',
+} as const;
+
+type TxStates = (typeof TxStates)[keyof typeof TxStates];
 
 const TemporaryWarning = ({
   tokenName, tokenAddress, setNeedsApproval,
 }: { tokenName?: string; tokenAddress?: string; setNeedsApproval: ReactSetter<boolean> }) => {
   const { fireTransaction } = useTxBuilder();
-  const [txState, setTxState] = useState(TxStates.Idle);
+  const [txState, setTxState] = useState<TxStates>(TxStates.Idle);
   const { errorToast, successToast } = useToast();
 
   const handleApprove = async () => {

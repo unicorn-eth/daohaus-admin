@@ -2,7 +2,7 @@ import { ComponentProps, useMemo } from 'react';
 import styled from 'styled-components';
 import { RegisterOptions, useFormContext } from 'react-hook-form';
 
-import { ignoreEmptyVal, isNumberish, SHAMAN_PERMISSIONS } from '@/lib/utils';
+import { ignoreEmptyVal, SHAMAN_PERMISSIONS } from '@/lib/utils';
 import { Buildable, DataSm, ShamanPermission } from '@/lib/ui';
 import { useDaoData } from '@/hooks/useDaoData';
 

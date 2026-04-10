@@ -4,7 +4,6 @@ import { Hash, zeroAddress } from 'viem';
 import { ABI, ArbitraryState, ReactSetter, TXLego } from '@/lib/utils';
 import {
   ABI_EXPLORER_KEYS,
-  GRAPH_API_KEYS,
   ENDPOINTS,
   HAUS_RPC,
   Keychain,
@@ -43,7 +42,16 @@ export const executeTx = async (args: {
   const { tx, txHash, setTransactions, chainId, lifeCycleFns, appState } = args;
   console.log('**Transaction Initiated**', txHash);
 
-  const publicClient = getPublicClient(wagmiConfig, { chainId: VIEM_CHAINS[chainId]?.id });
+  const publicClient = getPublicClient(wagmiConfig, {
+    chainId: VIEM_CHAINS[chainId]?.id as
+      | 1
+      | 10
+      | 100
+      | 8453
+      | 42161
+      | 11155111
+      | undefined,
+  });
 
   try {
     lifeCycleFns?.onTxHash?.(txHash);
@@ -66,7 +74,7 @@ export const executeTx = async (args: {
       standardGraphPoll({
         poll: tx?.customPoll?.fetch || pollLastTX,
         test: tx?.customPoll?.test || testLastTX,
-        variables: { chainId, txHash },
+        variables: [{ chainId, txHash }],
         onPollStart() {
           lifeCycleFns?.onPollStart?.();
           console.log('**Polling**');
@@ -196,13 +204,17 @@ export async function prepareTX(args: {
     const numericChainId = VIEM_CHAINS[chainId]?.id;
     if (!numericChainId) throw new Error(`No viem chain found for chainId: ${chainId}`);
 
-    const walletClient = await getWalletClient(wagmiConfig, { chainId: numericChainId });
+    const walletClient = await getWalletClient(wagmiConfig, {
+      chainId: numericChainId as 1 | 10 | 100 | 8453 | 42161 | 11155111,
+    });
     if (!walletClient) throw new Error('Wallet client not found');
 
-    const publicClient = getPublicClient(wagmiConfig, { chainId: numericChainId });
+    const publicClient = getPublicClient(wagmiConfig, {
+      chainId: numericChainId as 1 | 10 | 100 | 8453 | 42161 | 11155111,
+    });
     if (!publicClient) throw new Error('Public client not found');
 
-    const { request } = await publicClient.simulateContract({
+    const { request } = await (publicClient as any).simulateContract({
       account,
       address: address as `0x${string}`,
       abi,

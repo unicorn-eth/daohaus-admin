@@ -1,5 +1,4 @@
 import { useEnsName, useEnsAvatar } from "wagmi";
-import { truncateAddress } from "@/lib/utils";
 import type { AccountProfile } from "@/lib/utils";
 
 /**

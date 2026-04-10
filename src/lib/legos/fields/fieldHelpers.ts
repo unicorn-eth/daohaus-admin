@@ -9,7 +9,7 @@ import { FIND_MEMBER } from '@/lib/dao-hooks/utils/queries';
 import type { MemberItem, TokenBalance } from '@/lib/dao-hooks';
 import { ErrorMessage } from '@/lib/ui';
 import {
-  isArray, isNumberish, isNumberString, isString, ReactSetter, toBaseUnits, TokenBalance as UtilsTokenBalance,
+  isArray, isNumberish, isNumberString, isString, ReactSetter, toBaseUnits,
 } from '@/lib/utils';
 import { isAddress } from 'viem';
 

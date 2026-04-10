@@ -17,8 +17,7 @@ type Poll = ({
   poll: PollFetch;
   test: PollTest;
   interval?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  variables: Parameters<typeof poll>;
+  variables: unknown;
   onPollStart?: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onPollSuccess?: (result: any) => void;
