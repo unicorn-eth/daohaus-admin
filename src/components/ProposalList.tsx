@@ -2,7 +2,7 @@ import { MouseEvent, useState } from "react";
 import { Check, Filter } from "lucide-react";
 import styled from "styled-components";
 
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -55,6 +55,7 @@ export const ProposalList = ({
   daoid,
   rightActionEl,
 }: ProposalListProps) => {
+  const navigate = useNavigate();
   const { proposals, isLoading, isError } = useDaoProposals({
     chainid,
     daoid,
@@ -160,10 +161,12 @@ export const ProposalList = ({
             title="No proposals yet"
             description="New proposals will appear here once they are submitted."
             action={
-              <Button size="sm" color="secondary" asChild>
-                <Link to={`/molochv3/${chainid}/${daoid}/new-proposal`}>
-                  New Proposal
-                </Link>
+              <Button
+                size="sm"
+                color="secondary"
+                onClick={() => navigate(`/molochv3/${chainid}/${daoid}/new-proposal`)}
+              >
+                New Proposal
               </Button>
             }
           />
