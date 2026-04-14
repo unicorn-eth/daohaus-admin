@@ -7,8 +7,8 @@ import {
 import { isValidNetwork } from '@/lib/keychain-utils';
 import { useDaoTokenBalances } from '@/lib/dao-hooks';
 import { Buildable, Button, WrappedInputSelect } from '@/lib/ui';
-import { useDaoData } from '@/hooks/useDaoData';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
 import { getErc20s } from './fieldHelpers';
 
 export const RequestERC20 = (

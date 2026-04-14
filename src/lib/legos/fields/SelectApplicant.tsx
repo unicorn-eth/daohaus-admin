@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { useDaoMembers } from '@/lib/dao-hooks';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
 import { Keychain } from '@/lib/keychain-utils';
 
 import {

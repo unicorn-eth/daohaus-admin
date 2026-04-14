@@ -11,9 +11,9 @@ import {
   Buildable, Field, ParSm, WrappedCheckbox, Checkbox, DataSm,
 } from '@/lib/ui';
 
-import { useConnectedMember } from '@/hooks/useConnectedMember';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useConnectedMember } from '@/features/dao/hooks/useConnectedMember';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 import { useDaoTokenBalances } from '@/lib/dao-hooks';
 import { CheckboxProps, CheckedState } from '@radix-ui/react-checkbox';
 import styled from 'styled-components';

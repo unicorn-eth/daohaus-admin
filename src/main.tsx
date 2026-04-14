@@ -13,7 +13,7 @@ import { HausThemeProvider } from "@/lib/ui/theme";
 import { env } from "@/lib/env";
 import { router } from "./router";
 import { CustomRainbowAvatar } from "./lib/ui/components/atoms/RainbowAvatar";
-import { EnvWarning } from "./components/EnvWarning";
+import { EnvWarning } from "./app/components/EnvWarning";
 
 const queryClient = new QueryClient({
   defaultOptions: {

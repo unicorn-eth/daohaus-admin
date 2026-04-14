@@ -1,4 +1,5 @@
 export * from './endpoints';
+export * from './chainIds';
 export * from './networkData';
 export * from './explorerUtils';
 export * from './networkUtils';

@@ -27,14 +27,9 @@
     "baseUrl": ".",
     "paths": {
       "@/lib/*": ["./src/lib/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/pages/*": ["./src/pages/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/assets/*": ["./src/assets/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/layout/*": ["./src/layout/*"],
-      "@/types": ["./src/types/index.ts"],
-      "@/legos/*": ["./src/legos/*"]
+      "@/app/*": ["./src/app/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src"]

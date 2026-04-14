@@ -4,7 +4,7 @@ import { RegisterOptions, useFormContext } from 'react-hook-form';
 
 import { ignoreEmptyVal, SHAMAN_PERMISSIONS } from '@/lib/utils';
 import { Buildable, DataSm, ShamanPermission } from '@/lib/ui';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 
 const Secondary = styled.span`
   color: ${(props) => props.theme.secondary.step9};

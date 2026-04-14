@@ -1,18 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { HomeContainer } from '@/layout/HomeContainer';
-import { DaoContainer } from '@/layout/DaoContainer';
-import { Home } from '@/pages/Home';
-import { Summon } from '@/pages/Summon';
-import { DaoOverview } from '@/pages/DaoOverview';
-import { Proposals } from '@/pages/Proposals';
-import { Proposal } from '@/pages/Proposal';
-import { Members } from '@/pages/Members';
-import { Member } from '@/pages/Member';
-import { Safes } from '@/pages/Safes';
-import { Settings } from '@/pages/Settings';
-import { UpdateSettings } from '@/pages/UpdateSettings';
-import { NewProposal } from '@/pages/NewProposal';
-import { RageQuit } from '@/pages/RageQuit';
+import { HomeContainer } from '@/app/layouts/HomeContainer';
+import { DaoContainer } from '@/app/layouts/DaoContainer';
+import { Home } from '@/app/routes/Home';
+import { Summon } from '@/app/routes/Summon';
+import { DaoOverview } from '@/app/routes/DaoOverview';
+import { Proposals } from '@/app/routes/Proposals';
+import { Proposal } from '@/app/routes/Proposal';
+import { Members } from '@/app/routes/Members';
+import { Member } from '@/app/routes/Member';
+import { Safes } from '@/app/routes/Safes';
+import { Settings } from '@/app/routes/Settings';
+import { UpdateSettings } from '@/app/routes/UpdateSettings';
+import { NewProposal } from '@/app/routes/NewProposal';
+import { RageQuit } from '@/app/routes/RageQuit';
 
 export const router = createBrowserRouter([
   {
