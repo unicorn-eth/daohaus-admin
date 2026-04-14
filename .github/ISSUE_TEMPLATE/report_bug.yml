@@ -1,0 +1,30 @@
+---
+name: Report Issue
+description: Report a reproducible bug or issue
+labels: ["bug"]
+body:
+  - type: input
+    attributes:
+      label: Feature
+      description: What feature or area of the application are you using?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: |
+        If applicable, can you lay out the steps required to reproduce this issue?
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Screenshots and Context
+      placeholder: |
+        Add additional information that will help us address this issue.
+        You can add screenshots by pasting from your clipboard.
+    validations:
+      required: false

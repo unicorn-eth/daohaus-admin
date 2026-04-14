@@ -1,0 +1,9 @@
+---
+blank_issues_enabled: false
+contact_links:
+  - name: DAOhaus Homepage
+    url: https://daohaus.club/
+    about: Learn more about DAOhaus
+  - name: DAOhaus Discord
+    url: https://discord.gg/xJ4F9Kuv
+    about: "Join our discord to report issues and ask questions"
