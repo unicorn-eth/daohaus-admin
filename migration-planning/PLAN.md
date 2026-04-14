@@ -656,6 +656,7 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Yes/No vote buttons that call `Baal.submitVote(proposalId, approved)`
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/ProposalActions.tsx` — top-level status router (`ProposalActions`); dispatches to sub-components based on `proposal.status`
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/VotingPeriod.tsx` — checks if user has already voted; routes to `HasVoted` or `HasNotVoted`
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/HasNotVoted.tsx` — renders Yes/No vote buttons; calls `fireTransaction` with `ACTION_TX.VOTE` + `staticArgs: [proposalId, voteValue]`
@@ -665,6 +666,7 @@ Build each write operation one at a time and test on Sepolia before moving to th
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/VotingBar.tsx` — yes/no vote percentage bar (shared across several action sub-components)
 
 **Build in `haus-admin`:**
+
 - `src/components/ProposalActions/ProposalActions.tsx` — port as above; replace `useDHConnect` with wagmi `useAccount`, `useChainId`; replace `useTxBuilder` with local tx-builder hook
 - `src/components/ProposalActions/VotingPeriod.tsx`
 - `src/components/ProposalActions/HasNotVoted.tsx`
@@ -683,9 +685,11 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Calls `Baal.sponsorProposal(proposalId)` for unsponsored proposals; gated by `connectedMember.delegateShares >= dao.sponsorThreshold`
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/Unsponsored.tsx` — renders "Needs a Sponsor" UI with `GatedButton`; calls `fireTransaction` with `ACTION_TX.SPONSOR`
 
 **Build in `haus-admin`:**
+
 - `src/components/ProposalActions/Unsponsored.tsx` — port as above; already included as part of Op 1's `ProposalActions` router
 - No additional UI needed
 
@@ -698,9 +702,11 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Calls `Baal.processProposal(proposalId, proposalData)` after grace period; checks that the previous proposal in queue is also processable before enabling the button
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalCard/ReadyForProcessing.tsx` — renders verdict (quorum met / not), gas estimate display, Execute button; calls `checkCanProcess` (reads contract state via viem), then `fireTransaction` with `ACTION_TX.PROCESS` + `staticArgs: [proposalId, proposalData]` + gas override
 
 **Build in `haus-admin`:**
+
 - `src/components/ProposalActions/ReadyForProcessing.tsx` — port as above; `createViemClient` in the existing port should map cleanly to the local keychain-utils
 - Already included as part of Op 1's `ProposalActions` router
 
@@ -713,9 +719,11 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Calls `Baal.cancelProposal(proposalId)`; only shown when proposal is in `voting` status; gated by proposer, governor shaman, or sponsor below threshold
 
 **Source files to port:**
+
 - `monorepo/apps/admin/src/components/CancelProposal.tsx` — self-contained component; calls `fireTransaction` with `ACTION_TX.CANCEL`
 
 **Build in `haus-admin`:**
+
 - `src/components/CancelProposal.tsx` — port directly; replace `useDHConnect` → `useAccount`/`useChainId`, replace `useCurrentDao` → `useCurrentDao` (local hook), replace `useDaoData`/`useDaoProposal` → local dao-hooks equivalents
 - Wire into `Proposal` page header `actions` slot alongside Farcaster share button
 
@@ -728,38 +736,41 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Reads `formLego` query param, resolves lego from `PROPOSAL_FORMS`, renders `FormBuilder` which handles field rendering and transaction submission end-to-end
 
 **Source files to port:**
+
 - `monorepo/apps/admin/src/pages/NewProposal.tsx` — page; reads `formLego` param, calls `getFormLegoById`, renders `<FormBuilder>`
 - `monorepo/libs/moloch-v3-legos/src/form.ts` — `PROPOSAL_FORMS` and `COMMON_FORMS` — all form lego definitions (already in `src/lib/legos/` from 5b)
 - `monorepo/apps/admin/src/legos/legoConfig.tsx` — `AppFieldLookup` (maps field type strings to components); port to `src/legos/legoConfig.ts`
 
 **Proposal form legos in scope** (all exist in `PROPOSAL_FORMS` in `monorepo/libs/moloch-v3-legos/src/form.ts`):
 
-| Form ID | Title | Triggered from |
-| --- | --- | --- |
-| `SIGNAL` | Signal Request | NewProposalList |
-| `ISSUE` | DAO Token Request (Issue Tokens / Add Member) | NewProposalList, Members page |
-| `TRANSFER_ERC20` | ERC-20 Token Transfer (ragequittable safe) | NewProposalList, SafeActionMenu |
-| `TRANSFER_ERC20_SIDECAR` | ERC-20 Token Transfer (sidecar safe) | SafeActionMenu only |
-| `TRANSFER_NETWORK_TOKEN` | Network Token Transfer (ragequittable safe) | NewProposalList, SafeActionMenu |
-| `TRANSFER_NETWORK_TOKEN_SIDECAR` | Network Token Transfer (sidecar safe) | SafeActionMenu only |
-| `MULTICALL` | Tx Builder / Multicall (ragequittable safe) | SafeActionMenu only |
-| `MULTICALL_SIDECAR` | Tx Builder / Multicall (sidecar safe) | SafeActionMenu only |
-| `UPDATE_GOV_SETTINGS` | Update Governance Settings | NewProposalList |
-| `TOKEN_SETTINGS` | Update Token Settings | NewProposalList |
-| `TOKENS_FOR_SHARES` | Tokens for Shares | NewProposalList |
-| `GUILDKICK` | Guild Kick | NewProposalList, MemberProfileMenu |
-| `ADD_SHAMAN` | Add Shaman | NewProposalList |
-| `CREATE_PUBLICATION` | Create Publication | NewProposalList |
-| `CREATE_ARTICLE` | Create Article | NewProposalList |
+| Form ID                          | Title                                         | Triggered from                     |
+| -------------------------------- | --------------------------------------------- | ---------------------------------- |
+| `SIGNAL`                         | Signal Request                                | NewProposalList                    |
+| `ISSUE`                          | DAO Token Request (Issue Tokens / Add Member) | NewProposalList, Members page      |
+| `TRANSFER_ERC20`                 | ERC-20 Token Transfer (ragequittable safe)    | NewProposalList, SafeActionMenu    |
+| `TRANSFER_ERC20_SIDECAR`         | ERC-20 Token Transfer (sidecar safe)          | SafeActionMenu only                |
+| `TRANSFER_NETWORK_TOKEN`         | Network Token Transfer (ragequittable safe)   | NewProposalList, SafeActionMenu    |
+| `TRANSFER_NETWORK_TOKEN_SIDECAR` | Network Token Transfer (sidecar safe)         | SafeActionMenu only                |
+| `MULTICALL`                      | Tx Builder / Multicall (ragequittable safe)   | SafeActionMenu only                |
+| `MULTICALL_SIDECAR`              | Tx Builder / Multicall (sidecar safe)         | SafeActionMenu only                |
+| `UPDATE_GOV_SETTINGS`            | Update Governance Settings                    | NewProposalList                    |
+| `TOKEN_SETTINGS`                 | Update Token Settings                         | NewProposalList                    |
+| `TOKENS_FOR_SHARES`              | Tokens for Shares                             | NewProposalList                    |
+| `GUILDKICK`                      | Guild Kick                                    | NewProposalList, MemberProfileMenu |
+| `ADD_SHAMAN`                     | Add Shaman                                    | NewProposalList                    |
+| `CREATE_PUBLICATION`             | Create Publication                            | NewProposalList                    |
+| `CREATE_ARTICLE`                 | Create Article                                | NewProposalList                    |
 
 > **Sidecar variants:** When a safe is non-ragequittable (a sidecar safe), the transfer and multicall proposals use `*_SIDECAR` form lego variants which include a `SAFE_SELECT` field and route through a different tx lego (`ISSUE_ERC20_SIDECAR`, `ISSUE_NETWORK_TOKEN_SIDECAR`, `MULTICALL_SIDECAR`). The `SafeActionMenu` sets `defaultValues={"safeAddress":"<addr>"}` in the URL to pre-fill the safe selector. Ensure all sidecar lego IDs are registered in `legoConfig.ts`.
 
 **Build in `haus-admin`:**
+
 - `src/pages/NewProposal.tsx` — port directly; replace `useCurrentDao`, `useDaoData`, `useDaoProposals` with local hooks; replace `react-query` `useQueryClient` with `@tanstack/react-query`; `getFormLegoById` comes from local legos
 - `src/legos/legoConfig.ts` — port `AppFieldLookup`; references `MolochFields` from `src/lib/legos/fields/`
 - After form completes → `invalidateQueries` on proposals key, navigate to proposals list
 
 **New UI needed:**
+
 - `src/components/NewProposalList.tsx` — proposal type picker shown as a dialog on `Proposals` page and linked from "New Proposal" button. Port from `monorepo/apps/admin/src/components/NewProposalList.tsx`. Uses a `Tabs` component (Basic / Advanced). Each item is a `RouterLink` to `/new-proposal?formLego=<ID>`. **This UI does not currently exist in `haus-admin` — add "New Proposal" button + `NewProposalList` dialog to the `Proposals` page header.**
 
 **defaultValues pattern:** Some proposal types are pre-seeded via `?defaultValues=<JSON>` in the URL (e.g., Guild Kick pre-fills `memberAddress`). `NewProposal.tsx` reads and parses this from query params and passes to `FormBuilder`. Preserve this pattern exactly.
@@ -773,11 +784,13 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Sets or changes delegate address on the connected member's tokens; opens in a `Dialog`
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/MemberProfileMenu.tsx` — dropdown menu per member row; opens `ManageDelegate` or `ManageTokens` dialog based on `activeDialog` state
 - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/ManageDelegate.tsx` — renders `<FormBuilder form={COMMON_FORMS.MANAGE_DELEGATE} />` with `defaultValues` pre-filled from `connectedMember.delegatingTo`
 - `monorepo/libs/moloch-v3-legos/src/form.ts` — `COMMON_FORMS.MANAGE_DELEGATE` lego definition
 
 **Build in `haus-admin`:**
+
 - `src/components/MemberProfileMenu.tsx` — port `MemberProfileMenu`; replace `useDHConnect` → `useAccount`, replace `useConnectedMember` with local hook
 - `src/components/ManageDelegate.tsx` — port `ManageDelegate`; uses `FormBuilder` with local legos
 - Wire into `MemberList` table rows as the last column action cell
@@ -791,10 +804,12 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Transfers the connected member's shares/loot to another address; opens in a `Dialog`
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/ManageTokens.tsx` — renders `<FormBuilder form={COMMON_FORMS.MANAGE_TOKENS} />`
 - `monorepo/libs/moloch-v3-legos/src/form.ts` — `COMMON_FORMS.MANAGE_TOKENS` lego definition
 
 **Build in `haus-admin`:**
+
 - `src/components/ManageTokens.tsx` — port `ManageTokens`; included in `MemberProfileMenu` dialog alongside `ManageDelegate`
 
 ---
@@ -806,9 +821,11 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Navigates to `/new-proposal?formLego=GUILDKICK&defaultValues={"memberAddress":"<addr>"}` which pre-fills the Guild Kick form with the target member address
 
 **Source files:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/MemberProfileCard/MemberProfileMenu.tsx` — the "Guild Kick" item is a `RouterLink` with pre-built query params; no separate component needed
 
 **Build in `haus-admin`:**
+
 - Already covered by `MemberProfileMenu` (Op 6) and `NewProposal` page (Op 5); no additional work beyond ensuring the `GUILDKICK` lego ID is wired in `legoConfig`
 
 ---
@@ -820,9 +837,11 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Navigates to `/new-proposal?formLego=ISSUE` to submit an Issue Tokens proposal
 
 **Source files:**
+
 - `monorepo/apps/admin/src/pages/Members.tsx` — "Add Member" button is a `<ButtonRouterLink to="...new-proposal?formLego=ISSUE">`
 
 **Build in `haus-admin`:**
+
 - Add to `Members` page header — a single `RouterLink`-styled button. No separate component needed.
 
 ---
@@ -834,11 +853,13 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Lets connected member burn their shares/loot to withdraw proportional token balances from the treasury safe; pre-fills token list from the primary vault's current balances
 
 **Source files to port:**
+
 - `monorepo/apps/admin/src/pages/RageQuit.tsx` — page; builds `defaultFields` from `connectedMember` + `dao.vaults` (primary safe token balances), passes to `<FormBuilder form={COMMON_FORMS.RAGEQUIT} />`
 - `monorepo/libs/moloch-v3-legos/src/form.ts` — `COMMON_FORMS.RAGEQUIT` lego
 - `monorepo/libs/moloch-v3-fields/src/` — `sortTokensForRageQuit` utility (already in `src/lib/legos/fields/` from 5b)
 
 **Build in `haus-admin`:**
+
 - `src/pages/RageQuit.tsx` — port directly; replace hooks with local equivalents; `sortTokensForRageQuit` comes from `src/lib/legos/fields/`
 - `defaultFields` pattern: pre-fill `to` with connected member address, `tokens` with sorted token address list from primary vault (filter to `balance > 0`)
 - On `onPollSuccess`: refetch dao, member, and members list
@@ -854,10 +875,12 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Posts updated DAO metadata (name, description, avatar, tags, links) to the Poster contract via a proposal; pre-fills all fields from current DAO data
 
 **Source files to port:**
+
 - `monorepo/apps/admin/src/pages/UpdateSettings.tsx` — page; `formatDaoProfileForForm(dao)` maps DAO fields to form field names (`icon`, `tags`, `discord`, `github`, etc.); passes to `<FormBuilder form={COMMON_FORMS.METADATA_SETTINGS} />`
 - `monorepo/libs/moloch-v3-legos/src/form.ts` — `COMMON_FORMS.METADATA_SETTINGS` lego
 
 **Build in `haus-admin`:**
+
 - `src/pages/UpdateSettings.tsx` — port directly; keep `formatDaoProfileForForm` as a local helper in the same file; replace hooks with local equivalents
 - On `onPollSuccess`: refetch dao, navigate back to `/settings`
 
@@ -872,11 +895,13 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **What it does:** Creates a proposal to register a new Gnosis Safe with the DAO
 
 **Source files to port:**
+
 - `monorepo/apps/admin/src/pages/Safes.tsx` — wraps `AddSafeForm` in a `Dialog`; "New Safe" button only shown if `connectedMember` exists
 - `monorepo/apps/admin/src/components/AddSafeForm.tsx` — renders `<FormBuilder form={COMMON_FORMS.ADD_SAFE} />`; on `onPollSuccess` refetches dao and closes dialog via `onSuccess` callback
 - `monorepo/libs/moloch-v3-legos/src/form.ts` — `COMMON_FORMS.ADD_SAFE` lego
 
 **Build in `haus-admin`:**
+
 - `src/components/AddSafeForm.tsx` — port directly; replace hooks with local equivalents
 - Wire into `Safes` page as a `Dialog` triggered by the "New Safe" button; pass `onSuccess={() => setOpen(false)}` to form
 
@@ -887,6 +912,7 @@ Build each write operation one at a time and test on Sepolia before moving to th
 **Where:** `Safes` page, per-card three-dot dropdown (one menu per safe card)  
 **Trigger:** RouterLinks — no direct tx or form on this component itself; routes to `NewProposal` with correct `formLego` + `defaultValues`  
 **What it does:** Provides three proposal shortcuts from each safe card:
+
 - **Transfer ERC-20** → routes to `TRANSFER_ERC20` (ragequittable) or `TRANSFER_ERC20_SIDECAR` (sidecar, pre-fills `safeAddress`)
 - **Transfer [native token]** → routes to `TRANSFER_NETWORK_TOKEN` or `TRANSFER_NETWORK_TOKEN_SIDECAR` (pre-fills `safeAddress`)
 - **Tx Builder** → routes to `MULTICALL` or `MULTICALL_SIDECAR` (pre-fills `safeAddress`)
@@ -894,10 +920,12 @@ Build each write operation one at a time and test on Sepolia before moving to th
 The ragequittable vs. sidecar branch is determined by `safe.ragequittable`. The native token symbol shown in the menu label (e.g., "Transfer ETH", "Transfer xDAI") is read from `getNetwork(daoChain).symbol`.
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/SafeCard/SafeActionMenu.tsx` — dropdown menu; three `RouterLink`-based items; all routing, no tx logic in this component
 - `monorepo/libs/moloch-v3-macro-ui/src/components/SafeCard/SafeCard.styles.ts` — `SafeActionMenuLink`, `SafeActionMenuTrigger` styled components used in the menu
 
 **Build in `haus-admin`:**
+
 - `src/components/SafeActionMenu.tsx` — port `SafeActionMenu`; replace `useDHConnect` → `useAccount`; replace `getNetwork` import path to local keychain-utils
 - Wire into `SafeCard` component — the menu is already stubbed out in Phase 4g; in Phase 5 replace the stub with the real `SafeActionMenu`, gated by `includeLinks && connectedAddress`
 - No new page needed — all three actions route through the existing `NewProposal` page (Op 5)
@@ -915,6 +943,7 @@ The ragequittable vs. sidecar branch is determined by `safe.ragequittable`. The 
 This is the most complex field in the system — it has its own sub-form, ABI fetching, ABI caching, and encoding logic all inside a single custom field component.
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-fields/src/fields/MultisendActions.tsx` — the `multisendActions` custom field; includes:
   - Per-action rows with address input, ABI fetch (`fetchABI`, `getCode` from tx-builder), function selector, argument inputs
   - `cacheABI` for deduplication
@@ -925,19 +954,23 @@ This is the most complex field in the system — it has its own sub-form, ABI fe
 - `monorepo/libs/moloch-v3-legos/src/tx.ts` — `TX.MULTICALL` and `TX.MULTICALL_SIDECAR` tx lego definitions; already in `src/lib/legos/` from 5b
 
 **Dependencies from tx-builder (already ported in 5a):**
+
 - `fetchABI(address, chainId)` — Etherscan ABI lookup; **update to Etherscan v2 endpoint** using `VITE_ETHERSCAN_KEY`
 - `getCode(address, chainId)` — checks if address is a contract
 - `cacheABI(address, abi)` — in-memory ABI cache
 
 **Build in `haus-admin`:**
+
 - `MultisendActions` field is already part of `MolochFields` in `src/lib/legos/fields/` — verify it compiles and that `multisendActions` appears in `fieldConfig.ts`
 - `src/legos/legoConfig.ts` — `AppFieldLookup` inherits from `MolochFields`; no extra registration needed beyond what's already there
 - Ensure `MULTICALL` and `MULTICALL_SIDECAR` are resolvable by `getFormLegoById` in the local legos
 
 **Etherscan v2 update required:** `fetchABI` in the ported tx-builder will use an Etherscan v1-style URL. Update it to:
+
 ```
 https://api.etherscan.io/v2/api?chainid={numericChainId}&module=contract&action=getabi&address={addr}&apikey={VITE_ETHERSCAN_KEY}
 ```
+
 This is the same Etherscan v2 migration noted in Phase 6 — do it here since the tx builder depends on it directly.
 
 ---
@@ -949,6 +982,7 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
 **What it does:** Decodes the encoded calldata of a proposal into human-readable actions (target address, function name, parameter names/types/values). Required tx-builder to be in place before this could be implemented — deferred in Phase 4d.
 
 **Source files to port:**
+
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalDetails/ProposalDetailsContainer.tsx` — orchestrates decoding; calls `deepDecodeProposalActions({ chainId, actionData: proposal.proposalData })` from tx-builder; passes decoded result to both `ProposalDetails` and `ProposalActionData`
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalActionData/ProposalActionData.tsx` — renders decoded actions list; each action is collapsible; shows target address, value, and decoded params; handles `ActionError` gracefully
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalActionData/ValueDisplay.tsx` — renders individual param values; handles address, bytes, tuple, array types; links addresses to block explorer
@@ -957,13 +991,16 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
 - `monorepo/libs/moloch-v3-macro-ui/src/components/ProposalActionData/ProposalActionData.styles.ts` — styled-components for the action data panel
 
 **From tx-builder (already ported in 5a):**
+
 - `deepDecodeProposalActions` — the main decoding function; recursively decodes multisend payloads and nested calls
 - `DeepDecodedMultiTX`, `DeepDecodedAction`, `ActionError`, `isActionError` — types used throughout
 
 **From utils (already ported in Phase 3):**
+
 - `SENSITIVE_PROPOSAL_TYPES`, `DAO_METHOD_TO_PROPOSAL_TYPE`, `PROPOSAL_TYPE_WARNINGS` — config for `ProposalActionConfig`
 
 **Build in `haus-admin`:**
+
 - `src/components/ProposalActionData/ProposalActionData.tsx`
 - `src/components/ProposalActionData/ValueDisplay.tsx`
 - `src/components/ProposalActionData/ActionAlert.tsx`
@@ -988,11 +1025,13 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
 **Estimated effort:** ~3 to 5 focused engineering days, depending on how much of the old summon-specific helper code we choose to copy versus rewrite to match the newer `haus-admin` architecture.
 
 **Why this is medium and not large:**
+
 - The summon app is a single flow with a small number of components and a simple route-level state machine.
 - Most visual primitives already exist in `haus-admin/src/lib/ui/`.
 - The transaction layer, ABI data, contract keychains, and explorer utilities already exist locally in `haus-admin`.
 
 **What makes it non-trivial:**
+
 - The old summon app depends on `@daohaus/connect` (`useDHConnect`, `DaoHausNav`, `ExplorerLink`, `connectWallet`) and `@daohaus/contract-utils` (`assembleTxArgs`, `SummonParams`), neither of which are currently present as local APIs in `haus-admin`.
 - The summon success/loading/error flow still assumes the legacy app shell and hard-codes a link back to `admin.daohaus.club`.
 - We need to decide whether `/summon` lives inside the existing `AppLayout`/`HomeContainer` shell or intentionally keeps a distinct marketing-style layout.
@@ -1000,6 +1039,7 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
 ### Reuse Assessment
 
 **Can reuse directly or with light adaptation:**
+
 - `src/lib/ui/` primitives used by summon: `Button`, `Divider`, `FormSegment`, `SplitColumn`, `WrappedInput`, `WrappedTextArea`, `WrappedSwitch`, `TimePicker`, `AddressDisplay`, typography, breakpoint hooks, toast hooks
 - `src/lib/tx-builder/` for firing the summon transaction and polling for indexed results
 - `src/lib/keychain-utils/` for network validation, native symbol lookup, contract addresses, and explorer links
@@ -1008,6 +1048,7 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
 - Existing app navigation/footer patterns in `src/layout/AppLayout.tsx`
 
 **Needs to be added or adapted:**
+
 - Summon-specific transaction argument assembly (`assembleTxArgs`, `SummonParams`)
 - Summon route/page components and local assets
 - A RainbowKit-based replacement for `useDHConnect().connectWallet`
@@ -1149,29 +1190,6 @@ This is the same Etherscan v2 migration noted in Phase 6 — do it here since th
     - Token balances: 1 min stale
 
 11. **Environment variable validation** — Fail fast at startup if required env vars are missing. Small `src/lib/env.ts` module that reads and validates all env vars.
-
----
-
-## Open Questions
-
-Remaining items to resolve during implementation:
-
-1. **Poster contract:** Metadata updates and signal proposals use the Poster contract. The contract address is in `moloch-v3-legos/gnosisModule.json` and `CONTRACT_KEYCHAINS`. Confirm Poster is deployed on all supported chains (including mainnet) and the addresses are current before building Phase 5.
-
-2. **Graph API key:** The `haus-dao-hooks` uses a single `graphKey` for all chains via the Arbitrum gateway. Confirm whether the existing `NX_GRAPH_API_KEY_MAINNET` from the monorepo is the right key to carry over, or if a new key should be created for this app.
-
-3. **Mainnet subgraph ID:** Locate the deployed Ethereum mainnet DAOHAUS subgraph ID to add in Phase 2, step 5. Check the Graph dashboard or `monorepo/apps/moloch-v3-subgraph/` deploy history.
-
-4. **Gnosis Safe API chain coverage:** Verify the Safe Transaction Service supports all chains we target before committing to it over the Sequence Indexer in Phase 4g. Specifically confirm Gnosis chain (`0x64`) availability.
-
-**Resolved decisions:**
-
-- ✅ Alchemy covers Gnosis chain — no fallback needed
-- ✅ URL scheme stays `/molochv3/:daochain/:daoid` — no migration needed
-- ✅ Mainnet DAOs are in scope — subgraph ID to be added in Phase 2
-- ✅ ENS resolution via wagmi `useEnsName` / `useEnsAvatar`
-- ✅ All 11 proposal types are in scope for launch
-- ✅ Sequence wallet not needed — RainbowKit default wallet list is sufficient
 
 ---
 

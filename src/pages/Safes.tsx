@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 import {
   SingleColumnLayout,
-  ParMd,
   Loading,
   Button,
   Dialog,
   DialogContent,
   DialogTrigger,
 } from '@/lib/ui';
+import { EmptyState } from '@/components/EmptyState';
 import { useDao } from '@/lib/dao-hooks';
 import { useCurrentDao } from '@/hooks/useCurrentDao';
 import { useConnectedMember } from '@/hooks/useConnectedMember';
@@ -42,9 +42,18 @@ export const Safes = () => {
       }
     >
       {isLoading && <Loading size={80} />}
-      {isError && <ParMd>Failed to load safes.</ParMd>}
+      {isError && (
+        <EmptyState
+          variant="error"
+          title="Failed to load safes"
+          description="There was a problem fetching safes. Check your connection and try again."
+        />
+      )}
       {!isLoading && !isError && dao && sortedVaults.length === 0 && (
-        <ParMd>No safes found.</ParMd>
+        <EmptyState
+          title="No safes found"
+          description="This DAO has no linked Gnosis Safes yet."
+        />
       )}
       {!isLoading &&
         dao &&

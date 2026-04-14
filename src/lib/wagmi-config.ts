@@ -1,6 +1,13 @@
-import { createConfig, http } from 'wagmi';
-import { mainnet, gnosis, optimism, arbitrum, base, sepolia } from 'wagmi/chains';
-import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { createConfig, http } from "wagmi";
+import {
+  mainnet,
+  gnosis,
+  optimism,
+  arbitrum,
+  base,
+  sepolia,
+} from "wagmi/chains";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
   baseAccount,
   injectedWallet,
@@ -9,16 +16,16 @@ import {
   rainbowWallet,
   safeWallet,
   walletConnectWallet,
-} from '@rainbow-me/rainbowkit/wallets';
+} from "@rainbow-me/rainbowkit/wallets";
 
 const alchemyKey = import.meta.env.VITE_ALCHEMY_KEY as string;
-const projectId = import.meta.env.VITE_WALLET_CONNECT_ID as string;
+const projectId = import.meta.env.VITE_WALLET_CONNECT_ID || ("0x0" as string);
 const chains = [mainnet, gnosis, optimism, arbitrum, base, sepolia] as const;
 
 const connectors = connectorsForWallets(
   [
     {
-      groupName: 'Recommended',
+      groupName: "Recommended",
       wallets: [
         metaMaskWallet,
         rainbowWallet,
@@ -31,7 +38,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: 'DAOhaus Admin',
+    appName: "DAOhaus Admin",
     projectId,
   },
 );

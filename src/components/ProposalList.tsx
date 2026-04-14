@@ -2,10 +2,11 @@ import { MouseEvent, useState } from "react";
 import { Check, Filter } from "lucide-react";
 import styled from "styled-components";
 
+import { Link } from "react-router-dom";
+
 import {
   Button,
   Loading,
-  ParMd,
   SingleColumnLayout,
   widthQuery,
   DropdownMenu,
@@ -17,6 +18,7 @@ import { useDaoProposals } from "@/lib/dao-hooks";
 import { PROPOSAL_FILTER_LABELS, matchesStatusFilter } from "@/lib/utils";
 import { SearchInput } from "./SearchInput";
 import { ProposalCard } from "./ProposalCard";
+import { EmptyState } from "./EmptyState";
 
 const ActionsBar = styled.div`
   display: flex;
@@ -130,9 +132,42 @@ export const ProposalList = ({
       </ActionsBar>
 
       {isLoading && <Loading size={80} />}
-      {isError && <ParMd>Failed to load proposals.</ParMd>}
+      {isError && (
+        <EmptyState
+          variant="error"
+          title="Failed to load proposals"
+          description="There was a problem fetching proposals. Check your connection and try again."
+        />
+      )}
       {!isLoading && !isError && (!filtered || filtered.length === 0) && (
-        <ParMd>No proposals found.</ParMd>
+        searchTerm || filterKey ? (
+          <EmptyState
+            title="No proposals match your search"
+            description="Try a different search term or clear the filter."
+            action={
+              <Button
+                size="sm"
+                color="secondary"
+                variant="outline"
+                onClick={() => { handleSetSearchTerm(""); setFilterKey(""); }}
+              >
+                Clear filters
+              </Button>
+            }
+          />
+        ) : (
+          <EmptyState
+            title="No proposals yet"
+            description="New proposals will appear here once they are submitted."
+            action={
+              <Button size="sm" color="secondary" asChild>
+                <Link to={`/molochv3/${chainid}/${daoid}/new-proposal`}>
+                  New Proposal
+                </Link>
+              </Button>
+            }
+          />
+        )
       )}
 
       {visible?.map((proposal) => (

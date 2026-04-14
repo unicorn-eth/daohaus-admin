@@ -38,6 +38,7 @@ export const useDaoProposals = ({
   const { data, ...rest } = useQuery({
     queryKey: [`list-proposals`, { chainid, daoid }],
     enabled: Boolean(chainid && daoid),
+    staleTime: 30 * 1000, // 30 sec — proposals may be actively voting
     queryFn: async (): Promise<{
       proposals: ProposalItem[];
     }> => {

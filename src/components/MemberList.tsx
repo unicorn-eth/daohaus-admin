@@ -8,10 +8,10 @@ import {
   DataIndicator,
   SingleColumnLayout,
   Loading,
-  ParMd,
   Button,
   widthQuery,
 } from "@/lib/ui";
+import { EmptyState } from "./EmptyState";
 import { useDaoMembers, useDao } from "@/lib/dao-hooks";
 import type { MemberItem } from "@/lib/dao-hooks";
 import { charLimit, formatValueTo, fromWei } from "@/lib/utils";
@@ -172,9 +172,18 @@ export const MemberList = ({
       )}
 
       {isLoading && <Loading size={80} />}
-      {isError && <ParMd>Failed to load members.</ParMd>}
+      {isError && (
+        <EmptyState
+          variant="error"
+          title="Failed to load members"
+          description="There was a problem fetching members. Check your connection and try again."
+        />
+      )}
       {!isLoading && !isError && (!sorted || sorted.length === 0) && (
-        <ParMd>No members found.</ParMd>
+        <EmptyState
+          title="No members found"
+          description="Members who hold voting or non-voting tokens will appear here."
+        />
       )}
 
       {!isLoading && visible && visible.length > 0 && (

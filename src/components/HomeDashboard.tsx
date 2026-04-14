@@ -1,7 +1,9 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { useAccount, useChainId } from "wagmi";
-import { H2, Loading } from "@/lib/ui";
+import { Button, Loading } from "@/lib/ui";
+import { EmptyState } from "./EmptyState";
 import { useDaosForAddress } from "@/lib/dao-hooks";
 import type { DaoItem, MemberItem } from "@/lib/dao-hooks";
 import { toHexChainId, getNetworkName } from "@/utils/chainIds";
@@ -18,13 +20,6 @@ const CardGrid = styled.div`
   gap: 2.4rem;
 `;
 
-const CenterFrame = styled.div`
-  height: 20rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 function sortDaos(daos: DaoWithMember[], sortKey: string): DaoWithMember[] {
   const field = SORT_FIELDS[sortKey];
@@ -90,9 +85,7 @@ export const HomeDashboard = () => {
   if (isLoading) {
     return (
       <ListActions {...controlProps}>
-        <CenterFrame>
-          <Loading size={80} />
-        </CenterFrame>
+        <Loading size={80} />
       </ListActions>
     );
   }
@@ -100,9 +93,11 @@ export const HomeDashboard = () => {
   if (isError) {
     return (
       <ListActions {...controlProps}>
-        <CenterFrame>
-          <H2>Error loading DAOs</H2>
-        </CenterFrame>
+        <EmptyState
+          variant="error"
+          title="Failed to load DAOs"
+          description="There was a problem fetching your DAOs. Check your connection and try again."
+        />
       </ListActions>
     );
   }
@@ -110,9 +105,21 @@ export const HomeDashboard = () => {
   if (!filtered.length) {
     return (
       <ListActions {...controlProps}>
-        <CenterFrame>
-          <H2>No DAOs Found</H2>
-        </CenterFrame>
+        <EmptyState
+          title={searchTerm ? "No DAOs match your search" : "No DAOs found"}
+          description={
+            searchTerm
+              ? "Try a different search term."
+              : "You are not a member of any DAOs on this network. Summon one to get started."
+          }
+          action={
+            !searchTerm ? (
+              <Button size="sm" color="secondary" asChild>
+                <Link to="/summon">Summon a DAO</Link>
+              </Button>
+            ) : undefined
+          }
+        />
       </ListActions>
     );
   }

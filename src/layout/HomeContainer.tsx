@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { H4 } from '@/lib/ui';
 import { AppLayout } from './AppLayout';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const HomeContainer = () => {
   return (
@@ -11,7 +12,9 @@ export const HomeContainer = () => {
         { label: 'Summon', href: '/summon' },
       ]}
     >
-      <Outlet />
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
     </AppLayout>
   );
 };

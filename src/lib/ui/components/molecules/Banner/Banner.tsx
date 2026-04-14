@@ -1,13 +1,14 @@
-import { MessageCircle, Wrench } from 'lucide-react';
+import { MessageCircle, Wrench } from "lucide-react";
 
-import { Link, ParMd } from '../../atoms';
+import { Link, ParMd } from "../../atoms";
 
-import { BannerProps } from './Banner.types';
-import { StyledBanner } from './Banner.styles';
+import { BannerProps } from "./Banner.types";
+import { StyledBanner } from "./Banner.styles";
+import { DISCORD_INVITE } from "@/lib/utils/constants/links";
 
 export const Banner = ({
   className,
-  bannerText = 'DAOhaus v3 is currently in beta. Please report bugs, request features or provide feedback.',
+  bannerText = "DAOhaus v3 is currently in beta. Please report bugs, request features or provide feedback.",
 }: BannerProps) => {
   return (
     <StyledBanner className={className}>
@@ -16,14 +17,7 @@ export const Banner = ({
         <ParMd>{bannerText}</ParMd>
       </div>
       <div className="banner--link-container">
-        <Link
-          href="https://github.com/HausDAO/daohaus-monorepo/issues/new/choose"
-          showExternalIcon={false}
-          className="banner--link-item"
-        >
-          Give Feedback
-        </Link>
-        <Link showExternalIcon={false} href="https://discord.gg/kJaVkXtsXA">
+        <Link showExternalIcon={false} href={DISCORD_INVITE}>
           <MessageCircle />
           Support
         </Link>

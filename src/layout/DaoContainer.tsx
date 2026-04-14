@@ -6,6 +6,7 @@ import { useDao } from "@/lib/dao-hooks";
 import { TXBuilder } from "@/lib/tx-builder";
 import { H4 } from "@/lib/ui";
 import { AppLayout, NavLink } from "./AppLayout";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const DaoTitle = styled.div`
   display: flex;
@@ -56,7 +57,9 @@ export const DaoContainer = () => {
       appState={{ dao, userAddress: address }}
     >
       <AppLayout leftNav={leftNav} navLinks={navLinks}>
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </AppLayout>
     </TXBuilder>
   );
