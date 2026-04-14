@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components';
 import {
   Buildable, Field, FieldWrapper, HighlightInputText, WrappedInput, InputSelect,
 } from '@/lib/ui';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 import { unixTimeInSeconds } from '@/lib/utils';
 
 const INPUT_ID = 'expiryValue';

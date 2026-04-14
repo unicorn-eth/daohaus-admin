@@ -2,8 +2,8 @@ import { Buildable, WrappedInput, Field, ParMd, DataMd, ParSm, Tooltip } from '@
 import { formatValueTo, fromWei, votingPowerPercentage } from '@/lib/utils';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { useConnectedMember } from '@/hooks/useConnectedMember';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useConnectedMember } from '@/features/dao/hooks/useConnectedMember';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 
 const RemoveDelegate = styled(ParSm)`
   margin-top: 3rem;

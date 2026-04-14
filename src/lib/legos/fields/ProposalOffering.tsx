@@ -3,9 +3,9 @@ import { fromWei } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
 
 import { isValidNetwork, HAUS_NETWORK_DATA } from '@/lib/keychain-utils';
-import { useConnectedMember } from '@/hooks/useConnectedMember';
-import { useDaoData } from '@/hooks/useDaoData';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
+import { useConnectedMember } from '@/features/dao/hooks/useConnectedMember';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
 import { Buildable, ParMd, TintSecondary } from '@/lib/ui';
 
 export const ProposalOffering = (props: Buildable<{ id?: string }>) => {

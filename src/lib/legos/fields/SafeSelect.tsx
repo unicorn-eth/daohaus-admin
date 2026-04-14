@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Buildable, Field, WrappedSelect } from '@/lib/ui';
 import { truncateAddress } from '@/lib/utils';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 
 export const SafeSelect = (props: Buildable<Field>) => {
   const { dao } = useDaoData();
