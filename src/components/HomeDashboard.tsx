@@ -1,6 +1,6 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAccount, useChainId } from "wagmi";
 import { Button, Loading } from "@/lib/ui";
 import { EmptyState } from "./EmptyState";
@@ -42,6 +42,7 @@ export const HomeDashboard = () => {
   const hexChainId = toHexChainId(chainId) ?? "";
   const networkName = hexChainId ? getNetworkName(hexChainId) : "Unknown";
 
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState(DEFAULT_SORT_KEY);
   const [listType, setListType] = useState<ListType>(ListType.Cards);
@@ -114,8 +115,8 @@ export const HomeDashboard = () => {
           }
           action={
             !searchTerm ? (
-              <Button size="sm" color="secondary" asChild>
-                <Link to="/summon">Summon a DAO</Link>
+              <Button size="sm" color="secondary" onClick={() => navigate("/summon")}>
+                Summon a DAO
               </Button>
             ) : undefined
           }
