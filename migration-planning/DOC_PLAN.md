@@ -113,21 +113,26 @@ Recommended structure for each `AGENT.md`:
 # <Area Name>
 
 ## Purpose
+
 - What this folder owns
 - What it does not own
 
 ## Key Entry Points
+
 - Important files or barrels
 - Main route/layout/component/hook entrypoints
 
 ## Common Tasks
+
 - If editing X, start here
 - If adding Y, place it here
 
 ## Related Areas
+
 - Closest neighboring folders and why they matter
 
 ## Guardrails
+
 - Public import boundaries
 - Avoid direct imports from internal files if applicable
 ```
@@ -233,3 +238,80 @@ Start small:
 4. Add `src/features/summon/AGENT.md` as the first feature example
 
 This gives the repo a strong pattern without overcommitting to a large documentation surface.
+
+---
+
+## Implementation Status
+
+The first documentation iteration has now been completed and expanded slightly beyond the original minimum scope.
+
+### Completed
+
+Added higher-level documentation:
+
+- `README.md`
+- `docs/ARCHITECTURE.md`
+
+Added local navigation docs:
+
+- `src/AGENT.md`
+- `src/app/AGENT.md`
+- `src/lib/dao-hooks/AGENT.md`
+- `src/features/summon/AGENT.md`
+- `src/features/proposal/AGENT.md`
+- `src/features/member/AGENT.md`
+
+### What Was Covered
+
+The current docs now provide:
+
+- top-level local setup and environment guidance in `README.md`
+- a high-level system map in `docs/ARCHITECTURE.md`
+- source-level ownership guidance in `src/AGENT.md`
+- app shell and routing guidance in `src/app/AGENT.md`
+- shared DAO query/data access guidance in `src/lib/dao-hooks/AGENT.md`
+- feature-local guidance for the summon, proposal, and member areas
+
+This means the repo now has both:
+
+- high-level documentation for humans and agents to understand the application as a system
+- local `AGENT.md` files for task-specific navigation near the code being edited
+
+### Notes
+
+This work intentionally stayed lightweight:
+
+- docs are short and operational rather than exhaustive
+- the rollout focused on stable, high-value folders first
+- tiny leaf folders were still avoided
+
+---
+
+## Next Steps
+
+Recommended next documentation pass:
+
+1. Add `src/lib/tx-builder/AGENT.md`
+2. Add `src/lib/legos/AGENT.md`
+3. Consider `src/lib/form-builder/AGENT.md` if proposal and summon work continues to rely on it heavily
+4. Add feature guides for `src/features/settings/` and `src/features/safe/` if those areas are active soon
+5. Optionally add `src/features/dao/AGENT.md` if DAO-specific wrapper hooks and shared DAO feature logic continue to grow
+
+### Why These Are Next
+
+These areas are the highest-leverage remaining gaps because they are shared infrastructure or active feature surfaces that multiple routes depend on:
+
+- `tx-builder` explains transaction execution, lifecycle hooks, and shared write flows
+- `legos` explains reusable proposal and summon form definitions
+- `form-builder` explains how form configs become rendered flows
+- `settings` and `safe` are meaningful user-facing areas with enough surface area to justify local docs
+
+### Suggested Order
+
+If continuing in small PRs, the next practical sequence is:
+
+1. `src/lib/tx-builder/AGENT.md`
+2. `src/lib/legos/AGENT.md`
+3. `src/features/settings/AGENT.md`
+
+That would round out the most important shared transaction and form infrastructure before expanding further into lower-priority feature folders.
