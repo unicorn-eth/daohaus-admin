@@ -160,8 +160,6 @@ export const SafeCard = ({ dao, safe, daoChain, daoId }: SafeCardProps) => {
     }));
   }, [tokens, nativeSymbol]);
 
-  console.log("safe", safe);
-
   return (
     <SafeContainer>
       <SafeOverviewCard>
