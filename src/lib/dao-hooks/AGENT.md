@@ -8,10 +8,10 @@ This folder is the right home for reusable hooks that fetch DAO, proposal, membe
 
 ## Key Entry Points
 
-- Public exports: [`index.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/index.ts:1)
-- Provider and config context: [`DaoHooksContext.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/DaoHooksContext.tsx:1)
-- Hook implementations: [`hooks/`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/hooks/useDao.ts:1)
-- Shared query/types utilities: [`utils/`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/utils/queries.ts:1)
+- Public exports: [`index.ts`](index.ts)
+- Provider and config context: [`DaoHooksContext.tsx`](DaoHooksContext.tsx)
+- Hook implementations: [`hooks/`](hooks/useDao.ts)
+- Shared query/types utilities: [`utils/`](utils/queries.ts)
 
 ## Common Tasks
 
@@ -31,6 +31,6 @@ This folder is the right home for reusable hooks that fetch DAO, proposal, membe
 
 ## Related Areas
 
-- [`../../app/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/AGENT.md:1) for route-level consumers
-- [`../../features/summon/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/AGENT.md:1) for a tx-heavy feature example
-- [`../../../../docs/ARCHITECTURE.md`](/home/skuhl/Documents/ody/haus/haus-admin/docs/ARCHITECTURE.md:1) for system-level flow
+- [`../../app/AGENT.md`](../../app/AGENT.md) for route-level consumers
+- [`../../features/summon/AGENT.md`](../../features/summon/AGENT.md) for a tx-heavy feature example
+- [`../../../docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md) for system-level flow

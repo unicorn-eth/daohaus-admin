@@ -8,13 +8,13 @@ This folder should contain member-specific presentation and interaction logic. S
 
 ## Key Entry Points
 
-- Members list route: [`../../app/routes/Members.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Members.tsx:1)
-- Member detail route: [`../../app/routes/Member.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Member.tsx:1)
-- List UI: [`components/MemberList.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/components/MemberList.tsx:1)
+- Members list route: [`../../app/routes/Members.tsx`](../../app/routes/Members.tsx)
+- Member detail route: [`../../app/routes/Member.tsx`](../../app/routes/Member.tsx)
+- List UI: [`components/MemberList.tsx`](components/MemberList.tsx)
 - Row rendering:
-  [`components/MemberRow.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/components/MemberRow.tsx:1)
+  [`components/MemberRow.tsx`](components/MemberRow.tsx)
 - Profile surfaces:
-  [`components/MemberProfile.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/components/MemberProfile.tsx:1), [`components/MemberTokens.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/components/MemberTokens.tsx:1), and [`components/MemberStats.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/components/MemberStats.tsx:1)
+  [`components/MemberProfile.tsx`](components/MemberProfile.tsx), [`components/MemberTokens.tsx`](components/MemberTokens.tsx), and [`components/MemberStats.tsx`](components/MemberStats.tsx)
 
 ## Common Tasks
 
@@ -38,7 +38,7 @@ This folder should contain member-specific presentation and interaction logic. S
 
 ## Related Areas
 
-- Shared DAO/member queries: [`../../lib/dao-hooks/index.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/index.ts:1)
-- Route DAO context: [`../../app/hooks/useCurrentDao.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/hooks/useCurrentDao.ts:1)
-- Proposal flow for adding members: [`../proposal/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/AGENT.md:1)
-- System overview: [`../../../../docs/ARCHITECTURE.md`](/home/skuhl/Documents/ody/haus/haus-admin/docs/ARCHITECTURE.md:1)
+- Shared DAO/member queries: [`../../lib/dao-hooks/index.ts`](../../lib/dao-hooks/index.ts)
+- Route DAO context: [`../../app/hooks/useCurrentDao.ts`](../../app/hooks/useCurrentDao.ts)
+- Proposal flow for adding members: [`../proposal/AGENT.md`](../proposal/AGENT.md)
+- System overview: [`../../../docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md)

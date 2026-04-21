@@ -8,16 +8,16 @@ This folder should hold proposal-specific presentation and workflow logic. Gener
 
 ## Key Entry Points
 
-- Proposal list route: [`../../app/routes/Proposals.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Proposals.tsx:1)
-- Proposal detail route: [`../../app/routes/Proposal.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Proposal.tsx:1)
-- New proposal route: [`../../app/routes/NewProposal.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/NewProposal.tsx:1)
-- List UI: [`components/ProposalList.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/components/ProposalList.tsx:1)
+- Proposal list route: [`../../app/routes/Proposals.tsx`](../../app/routes/Proposals.tsx)
+- Proposal detail route: [`../../app/routes/Proposal.tsx`](../../app/routes/Proposal.tsx)
+- New proposal route: [`../../app/routes/NewProposal.tsx`](../../app/routes/NewProposal.tsx)
+- List UI: [`components/ProposalList.tsx`](components/ProposalList.tsx)
 - Detail card and history:
-  [`components/ProposalDetailCard.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/components/ProposalDetailCard.tsx:1) and [`components/ProposalHistory.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/components/ProposalHistory.tsx:1)
+  [`components/ProposalDetailCard.tsx`](components/ProposalDetailCard.tsx) and [`components/ProposalHistory.tsx`](components/ProposalHistory.tsx)
 - Action surfaces:
-  [`components/ProposalActions/ProposalActions.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/components/ProposalActions/ProposalActions.tsx:1)
+  [`components/ProposalActions/ProposalActions.tsx`](components/ProposalActions/ProposalActions.tsx)
 - Decoded transaction display:
-  [`components/ProposalActionData/ProposalActionData.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/components/ProposalActionData/ProposalActionData.tsx:1)
+  [`components/ProposalActionData/ProposalActionData.tsx`](components/ProposalActionData/ProposalActionData.tsx)
 
 ## Common Tasks
 
@@ -41,8 +41,8 @@ This folder should hold proposal-specific presentation and workflow logic. Gener
 
 ## Related Areas
 
-- Shared DAO queries: [`../../lib/dao-hooks/index.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/index.ts:1)
-- Shared tx execution and decoding: [`../../lib/tx-builder/TXBuilder.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/tx-builder/TXBuilder.tsx:1)
-- Shared proposal form definitions: [`../../lib/legos/index.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/legos/index.ts:1)
-- Member-related proposal interactions: [`../member/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/AGENT.md:1)
-- System overview: [`../../../../docs/ARCHITECTURE.md`](/home/skuhl/Documents/ody/haus/haus-admin/docs/ARCHITECTURE.md:1)
+- Shared DAO queries: [`../../lib/dao-hooks/index.ts`](../../lib/dao-hooks/index.ts)
+- Shared tx execution and decoding: [`../../lib/tx-builder/TXBuilder.tsx`](../../lib/tx-builder/TXBuilder.tsx)
+- Shared proposal form definitions: [`../../lib/legos/index.ts`](../../lib/legos/index.ts)
+- Member-related proposal interactions: [`../member/AGENT.md`](../member/AGENT.md)
+- System overview: [`../../../docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md)
