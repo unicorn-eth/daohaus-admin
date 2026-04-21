@@ -15,7 +15,7 @@ This document gives a high-level map of the application so developers and agents
 
 ## Boot Flow
 
-Application startup happens in [`src/main.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/main.tsx:1).
+Application startup happens in [`src/main.tsx`](../src/main.tsx).
 
 Provider order:
 
@@ -30,14 +30,14 @@ This means most route screens can assume wallet, query, and DAO hook configurati
 
 ## Routing Model
 
-Routes are defined in [`src/router.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/router.tsx:1).
+Routes are defined in [`src/router.tsx`](../src/router.tsx).
 
 - `/` uses `HomeContainer` and hosts the landing/dashboard experience.
 - `/summon` hosts the DAO creation flow.
 - `/molochv3/:daochain/:daoid` uses `DaoContainer` and wraps DAO-specific screens.
 - DAO child routes include overview, proposals, proposal detail, members, member detail, safes, settings, settings update, new proposal, and ragequit.
 
-`HomeContainer` and `DaoContainer` are the main shell boundaries in [`src/app/layouts`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/layouts/HomeContainer.tsx:1). `DaoContainer` also initializes a `TXBuilder` with DAO-aware state so child routes can trigger transactions without rebuilding that context.
+`HomeContainer` and `DaoContainer` are the main shell boundaries in [`src/app/layouts`](../src/app/layouts/HomeContainer.tsx). `DaoContainer` also initializes a `TXBuilder` with DAO-aware state so child routes can trigger transactions without rebuilding that context.
 
 ## Code Organization
 
@@ -87,10 +87,10 @@ Most write-oriented flows follow this shape:
 
 The Summon flow is a good reference:
 
-- Route entry: [`src/app/routes/Summon.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Summon.tsx:1)
-- Form and feature UI: [`src/features/summon/components/SummonerForm.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/components/SummonerForm.tsx:1)
-- Tx assembly: [`src/features/summon/utils/transactions.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/utils/transactions.ts:1)
-- Shared execution layer: [`src/lib/tx-builder/TXBuilder.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/tx-builder/TXBuilder.tsx:1)
+- Route entry: [`src/app/routes/Summon.tsx`](../src/app/routes/Summon.tsx)
+- Form and feature UI: [`src/features/summon/components/SummonerForm.tsx`](../src/features/summon/components/SummonerForm.tsx)
+- Tx assembly: [`src/features/summon/utils/transactions.ts`](../src/features/summon/utils/transactions.ts)
+- Shared execution layer: [`src/lib/tx-builder/TXBuilder.tsx`](../src/lib/tx-builder/TXBuilder.tsx)
 
 ## Dependency Guardrails
 
@@ -103,19 +103,32 @@ The Summon flow is a good reference:
 ## Common Starting Points
 
 - Add or change a route:
-  start with [`src/router.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/router.tsx:1) and the relevant file in [`src/app/routes`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Summon.tsx:1)
+  start with [`src/router.tsx`](../src/router.tsx) and the relevant file in [`src/app/routes`](../src/app/routes/Summon.tsx)
 - Add shared DAO data fetching:
-  start in [`src/lib/dao-hooks`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/index.ts:1)
+  start in [`src/lib/dao-hooks`](../src/lib/dao-hooks/index.ts)
 - Add a tx-enabled action:
-  inspect the relevant feature folder plus [`src/lib/tx-builder`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/tx-builder/index.ts:1)
+  inspect the relevant feature folder plus [`src/lib/tx-builder`](../src/lib/tx-builder/index.ts)
 - Add app-wide shell behavior:
-  start in [`src/app/layouts`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/layouts/DaoContainer.tsx:1)
+  start in [`src/app/layouts`](../src/app/layouts/DaoContainer.tsx)
 
 ## Related Local Docs
 
-- [`src/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/AGENT.md:1)
-- [`src/app/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/AGENT.md:1)
-- [`src/lib/dao-hooks/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/AGENT.md:1)
-- [`src/features/summon/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/AGENT.md:1)
-- [`src/features/proposal/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/AGENT.md:1)
-- [`src/features/member/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/AGENT.md:1)
+- [`docs/DEBUGGING.md`](DEBUGGING.md)
+- [`docs/DOMAIN_GLOSSARY.md`](DOMAIN_GLOSSARY.md)
+- [`docs/ENVIRONMENT.md`](ENVIRONMENT.md)
+- [`docs/VERIFICATION.md`](VERIFICATION.md)
+- [`src/AGENT.md`](../src/AGENT.md)
+- [`src/app/AGENT.md`](../src/app/AGENT.md)
+- [`src/lib/dao-hooks/AGENT.md`](../src/lib/dao-hooks/AGENT.md)
+- [`src/lib/tx-builder/AGENT.md`](../src/lib/tx-builder/AGENT.md)
+- [`src/lib/form-builder/AGENT.md`](../src/lib/form-builder/AGENT.md)
+- [`src/lib/legos/AGENT.md`](../src/lib/legos/AGENT.md)
+- [`src/features/home/AGENT.md`](../src/features/home/AGENT.md)
+- [`src/features/dao/AGENT.md`](../src/features/dao/AGENT.md)
+- [`src/features/summon/AGENT.md`](../src/features/summon/AGENT.md)
+- [`src/features/proposal/AGENT.md`](../src/features/proposal/AGENT.md)
+- [`src/features/member/AGENT.md`](../src/features/member/AGENT.md)
+- [`src/features/safe/AGENT.md`](../src/features/safe/AGENT.md)
+- [`src/features/settings/AGENT.md`](../src/features/settings/AGENT.md)
+- [`src/lib/ui/AGENT.md`](../src/lib/ui/AGENT.md)
+- [`src/lib/keychain-utils/AGENT.md`](../src/lib/keychain-utils/AGENT.md)

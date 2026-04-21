@@ -26,7 +26,7 @@ VITE_GNOSIS_SAFE_API_KEY=
 VITE_SEQUENCE_KEY=
 ```
 
-The first five variables are required by [`src/lib/env.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/env.ts:1). `VITE_SEQUENCE_KEY` is optional.
+The first five variables are required by [`src/lib/env.ts`](src/lib/env.ts). `VITE_SEQUENCE_KEY` is optional. See [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md) for variable purpose and failure modes.
 
 Start the dev server:
 
@@ -48,14 +48,29 @@ npm run preview
 - `src/features` contains user-facing domain areas such as `proposal`, `summon`, `member`, and `settings`.
 - `src/lib` contains reusable infrastructure such as DAO data hooks, transaction building, form composition, network utilities, and UI primitives.
 
-Routing is defined in [`src/router.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/router.tsx:1). App-wide providers are assembled in [`src/main.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/main.tsx:1).
+Routing is defined in [`src/router.tsx`](src/router.tsx). App-wide providers are assembled in [`src/main.tsx`](src/main.tsx).
 
-## Docs
+## Docs Map
 
-- High-level architecture: [`docs/ARCHITECTURE.md`](/home/skuhl/Documents/ody/haus/haus-admin/docs/ARCHITECTURE.md:1)
-- Source navigation guide: [`src/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/AGENT.md:1)
-- App shell guide: [`src/app/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/AGENT.md:1)
-- Shared DAO hooks guide: [`src/lib/dao-hooks/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/AGENT.md:1)
-- Summon feature guide: [`src/features/summon/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/AGENT.md:1)
-- Proposal feature guide: [`src/features/proposal/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/proposal/AGENT.md:1)
-- Member feature guide: [`src/features/member/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/member/AGENT.md:1)
+Start with the architecture and source guides, then read the nearest local guide for the area you are changing.
+
+- High-level architecture: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- Debugging guide: [`docs/DEBUGGING.md`](docs/DEBUGGING.md)
+- Domain glossary: [`docs/DOMAIN_GLOSSARY.md`](docs/DOMAIN_GLOSSARY.md)
+- Environment guide: [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md)
+- Verification guide: [`docs/VERIFICATION.md`](docs/VERIFICATION.md)
+- Source navigation guide: [`src/AGENT.md`](src/AGENT.md)
+- App shell guide: [`src/app/AGENT.md`](src/app/AGENT.md)
+- Shared DAO hooks guide: [`src/lib/dao-hooks/AGENT.md`](src/lib/dao-hooks/AGENT.md)
+- Transaction builder guide: [`src/lib/tx-builder/AGENT.md`](src/lib/tx-builder/AGENT.md)
+- Form builder guide: [`src/lib/form-builder/AGENT.md`](src/lib/form-builder/AGENT.md)
+- Legos guide: [`src/lib/legos/AGENT.md`](src/lib/legos/AGENT.md)
+- Home feature guide: [`src/features/home/AGENT.md`](src/features/home/AGENT.md)
+- DAO feature guide: [`src/features/dao/AGENT.md`](src/features/dao/AGENT.md)
+- Summon feature guide: [`src/features/summon/AGENT.md`](src/features/summon/AGENT.md)
+- Proposal feature guide: [`src/features/proposal/AGENT.md`](src/features/proposal/AGENT.md)
+- Member feature guide: [`src/features/member/AGENT.md`](src/features/member/AGENT.md)
+- Safe feature guide: [`src/features/safe/AGENT.md`](src/features/safe/AGENT.md)
+- Settings feature guide: [`src/features/settings/AGENT.md`](src/features/settings/AGENT.md)
+- UI guide: [`src/lib/ui/AGENT.md`](src/lib/ui/AGENT.md)
+- Keychain/network guide: [`src/lib/keychain-utils/AGENT.md`](src/lib/keychain-utils/AGENT.md)

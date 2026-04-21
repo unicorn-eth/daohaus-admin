@@ -19,10 +19,10 @@ This folder does not own most business logic for proposals, members, safes, or s
 
 ## Key Entry Points
 
-- Router definition lives in [`../router.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/router.tsx:1)
-- Home shell starts in [`layouts/HomeContainer.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/layouts/HomeContainer.tsx:1)
-- DAO shell starts in [`layouts/DaoContainer.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/layouts/DaoContainer.tsx:1)
-- Route-derived DAO context helper lives in [`hooks/useCurrentDao.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/hooks/useCurrentDao.ts:1)
+- Router definition lives in [`../router.tsx`](../router.tsx)
+- Home shell starts in [`layouts/HomeContainer.tsx`](layouts/HomeContainer.tsx)
+- DAO shell starts in [`layouts/DaoContainer.tsx`](layouts/DaoContainer.tsx)
+- Route-derived DAO context helper lives in [`hooks/useCurrentDao.ts`](hooks/useCurrentDao.ts)
 
 ## Common Tasks
 
@@ -42,6 +42,7 @@ This folder does not own most business logic for proposals, members, safes, or s
 
 ## Related Areas
 
-- [`../AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/AGENT.md:1)
-- [`../lib/dao-hooks/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/dao-hooks/AGENT.md:1)
-- [`../features/summon/AGENT.md`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/AGENT.md:1)
+- [`../AGENT.md`](../AGENT.md)
+- [`../lib/dao-hooks/AGENT.md`](../lib/dao-hooks/AGENT.md)
+- [`../features/summon/AGENT.md`](../features/summon/AGENT.md)
+- [`../../docs/DEBUGGING.md`](../../docs/DEBUGGING.md)

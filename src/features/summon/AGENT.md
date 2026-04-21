@@ -8,15 +8,15 @@ This folder covers summon-specific form composition, validation, feature state t
 
 ## Key Entry Points
 
-- Route entry: [`../../app/routes/Summon.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/app/routes/Summon.tsx:1)
-- Main form: [`components/SummonerForm.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/components/SummonerForm.tsx:1)
+- Route entry: [`../../app/routes/Summon.tsx`](../../app/routes/Summon.tsx)
+- Main form: [`components/SummonerForm.tsx`](components/SummonerForm.tsx)
 - UI states:
   `SummonerLoading.tsx`, `SummonerSuccess.tsx`, and `SummonError.tsx`
-- Form keys: [`utils/formKeys.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/utils/formKeys.ts:1)
+- Form keys: [`utils/formKeys.ts`](utils/formKeys.ts)
 - Validation and normalization:
-  [`utils/validation.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/utils/validation.ts:1)
+  [`utils/validation.ts`](utils/validation.ts)
 - Tx assembly:
-  [`utils/transactions.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/features/summon/utils/transactions.ts:1)
+  [`utils/transactions.ts`](utils/transactions.ts)
 
 ## Common Tasks
 
@@ -38,7 +38,7 @@ This folder covers summon-specific form composition, validation, feature state t
 
 ## Related Areas
 
-- Shared tx execution: [`../../lib/tx-builder/TXBuilder.tsx`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/tx-builder/TXBuilder.tsx:1)
-- Network and contract helpers: [`../../lib/keychain-utils/index.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/keychain-utils/index.ts:1)
-- Shared form and field building: [`../../lib/legos/index.ts`](/home/skuhl/Documents/ody/haus/haus-admin/src/lib/legos/index.ts:1)
-- System overview: [`../../../../docs/ARCHITECTURE.md`](/home/skuhl/Documents/ody/haus/haus-admin/docs/ARCHITECTURE.md:1)
+- Shared tx execution: [`../../lib/tx-builder/TXBuilder.tsx`](../../lib/tx-builder/TXBuilder.tsx)
+- Network and contract helpers: [`../../lib/keychain-utils/index.ts`](../../lib/keychain-utils/index.ts)
+- Shared form and field building: [`../../lib/legos/index.ts`](../../lib/legos/index.ts)
+- System overview: [`../../../docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md)
