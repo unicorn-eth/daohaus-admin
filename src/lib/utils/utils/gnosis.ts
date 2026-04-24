@@ -6,4 +6,14 @@ export const generateGnosisUiLink = ({
 }: {
   chainId: ValidNetwork;
   address?: string;
-}) => `${ENDPOINTS['GNOSIS_SAFE_UI'][chainId]}:${address}/balances`;
+}) => {
+  const safeUiPath = ENDPOINTS['GNOSIS_SAFE_UI'][chainId];
+  if (!safeUiPath) return '';
+
+  const networkPrefix = safeUiPath.split('/').pop();
+  const baseUrl = safeUiPath.replace(`/${networkPrefix}`, '');
+
+  if (!address || !networkPrefix) return `${baseUrl}/balances`;
+
+  return `${baseUrl}/balances?safe=${networkPrefix}:${address}`;
+};
