@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { H1, ParMd, ParXl } from '@/lib/ui';
+import styled from "styled-components";
+import { H1, ParMd, ParXl } from "@/lib/ui";
 
 const ViewBox = styled.div`
   width: 100%;
@@ -21,6 +21,13 @@ const ViewBox = styled.div`
     margin-bottom: 2.4rem;
     font-weight: 700;
   }
+  pre {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.3;
+    font-family: "Courier New", Courier, monospace;
+    white-space: pre;
+  }
   ul {
     padding-inline-start: 2.4rem;
     margin-top: 1.6rem;
@@ -28,6 +35,14 @@ const ViewBox = styled.div`
   li {
     font-size: 1.6rem;
     margin-bottom: 0.8rem;
+  }
+  @media (max-width: 640px) {
+    .hero {
+      font-size: 4.8rem;
+    }
+    pre {
+      font-size: 1.2rem;
+    }
   }
 `;
 
