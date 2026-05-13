@@ -7,9 +7,9 @@ import {
   createViemClient, handleBaseUnits, ignoreEmptyVal, toWholeUnits, ValidateField, ZERO_ADDRESS,
 } from '@/lib/utils';
 import { Buildable, Button, Field, WrappedInput, WrappedInputSelect } from '@/lib/ui';
-import { useConnectedMember } from '@/hooks/useConnectedMember';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useConnectedMember } from '@/features/dao/hooks/useConnectedMember';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 import type { DaoItem } from '@/lib/dao-hooks';
 
 type Token = { name: string; value: string; paused: boolean; decimals: number };

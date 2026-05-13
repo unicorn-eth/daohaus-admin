@@ -44,10 +44,6 @@ export const ENDPOINTS: KeychainList = {
     '0xaa36a7': 'https://app.safe.global/sep',
     '0x2105': 'https://app.safe.global/base',
   },
-  TABULA_GRAPH: {
-    '0x2105':
-      'https://api.thegraph.com/subgraphs/name/auryn-macmillan/tabula-goerli',
-  },
   SEQUENCE_API: {
     '0x1': 'https://mainnet-indexer.sequence.app',
     '0x64': 'https://gnosis-indexer.sequence.app',

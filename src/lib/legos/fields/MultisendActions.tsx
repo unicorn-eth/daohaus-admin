@@ -6,8 +6,8 @@ import { PlusCircle, AlertTriangle } from 'lucide-react';
 
 import { FormBuilderFactory, useFormBuilder } from '@/lib/form-builder';
 import { Keychain } from '@/lib/keychain-utils';
-import { useDaoData } from '@/hooks/useDaoData';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
 import { cacheABI, fetchABI, getCode, txActionToMetaTx } from '@/lib/tx-builder';
 import {
   AddressDisplay, Bold, Buildable, Button, Card, DataSm, ErrorMessage, ErrorText,

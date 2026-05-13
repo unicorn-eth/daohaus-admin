@@ -8,7 +8,7 @@ import {
   Container,
   LabelContainer,
   StyledLabel,
-} from './Switch.styles.';
+} from './Switch.styles';
 
 type LabelProps = {
   id?: string;

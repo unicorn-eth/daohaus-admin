@@ -3,8 +3,8 @@ import { RegisterOptions, useFormContext } from 'react-hook-form';
 
 import { toWholeUnits, handleBaseUnits } from '@/lib/utils';
 import { Buildable, Button, WrappedInput, Field } from '@/lib/ui';
-import { useConnectedMember } from '@/hooks/useConnectedMember';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useConnectedMember } from '@/features/dao/hooks/useConnectedMember';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 
 export const RagequitToken = (props: Buildable<Field>) => {
   const { id } = props;

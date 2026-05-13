@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { FieldSpacer } from '@/lib/form-builder';
 import { ValidNetwork } from '@/lib/keychain-utils';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
-import { useDaoData } from '@/hooks/useDaoData';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
 import {
   Buildable, Button, Field, FieldWrapper, HighlightInputText,
   ParSm, ParMd, Loading, WrappedInput,

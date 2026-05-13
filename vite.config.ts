@@ -99,14 +99,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@/lib': resolve(__dirname, 'src/lib'),
-      '@/components': resolve(__dirname, 'src/components'),
-      '@/pages': resolve(__dirname, 'src/pages'),
-      '@/hooks': resolve(__dirname, 'src/hooks'),
+      '@/app': resolve(__dirname, 'src/app'),
+      '@/features': resolve(__dirname, 'src/features'),
       '@/assets': resolve(__dirname, 'src/assets'),
-      '@/utils': resolve(__dirname, 'src/utils'),
-      '@/layout': resolve(__dirname, 'src/layout'),
-      '@/types': resolve(__dirname, 'src/types/index.ts'),
-      '@/legos': resolve(__dirname, 'src/legos'),
     },
   },
   define: {

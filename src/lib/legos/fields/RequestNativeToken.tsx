@@ -5,8 +5,8 @@ import { handleBaseUnits, toWholeUnits, truncValue } from '@/lib/utils';
 import { Buildable, Button, WrappedInput } from '@/lib/ui';
 import { isValidNetwork } from '@/lib/keychain-utils';
 import { useDaoTokenBalances } from '@/lib/dao-hooks';
-import { useDaoData } from '@/hooks/useDaoData';
-import { useCurrentDao } from '@/hooks/useCurrentDao';
+import { useDaoData } from '@/features/dao/hooks/useDaoData';
+import { useCurrentDao } from '@/app/hooks/useCurrentDao';
 
 export const RequestNativeToken = (
   props: Buildable<{ amtId?: string; addressId?: string; safeAddressId?: string }>

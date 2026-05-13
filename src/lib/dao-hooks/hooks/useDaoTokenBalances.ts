@@ -17,6 +17,7 @@ export const useDaoTokenBalances = ({
   const { data, ...rest } = useQuery({
     queryKey: [`list-dao-tokens`, { chainid, safeAddress }],
     enabled: Boolean(chainid && safeAddress && url),
+    staleTime: 60 * 1000, // 1 min — token balances change on each tx
     queryFn: async (): Promise<{
       tokens: TokenBalance[];
     }> => {

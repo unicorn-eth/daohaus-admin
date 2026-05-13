@@ -2,7 +2,15 @@
   "name": "haus-admin",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "npm@11.7.0",
   "type": "module",
+  "engines": {
+    "node": "20.19.5",
+    "npm": "11.7.0"
+  },
+  "overrides": {
+    "hono": "4.12.12"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -25,6 +33,7 @@
     "@radix-ui/react-toast": "^1.2.15",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@rainbow-me/rainbowkit": "^2.2.10",
+    "@noble/hashes": "^2.0.1",
     "@shazow/whatsabi": "^0.26.0",
     "@tanstack/react-query": "^5.96.2",
     "@tanstack/react-query-devtools": "^5.96.2",
@@ -34,6 +43,7 @@
     "classnames": "^2.5.1",
     "ethereum-blockies-base64": "^1.0.2",
     "ethers-multisend": "^3.1.0",
+    "graphql": "^16.11.0",
     "graphql-request": "^7.4.0",
     "localforage": "^1.10.0",
     "lucide-react": "^1.7.0",

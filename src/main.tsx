@@ -10,10 +10,19 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { wagmiConfig } from "@/lib/wagmi-config";
 import { DaoHooksProvider } from "@/lib/dao-hooks";
 import { HausThemeProvider } from "@/lib/ui/theme";
+import { env } from "@/lib/env";
 import { router } from "./router";
 import { CustomRainbowAvatar } from "./lib/ui/components/atoms/RainbowAvatar";
+import { EnvWarning } from "./app/components/EnvWarning";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 2 * 60 * 1000,  // 2 min — DAO data, members
+      gcTime: 10 * 60 * 1000,    // 10 min
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -30,10 +39,11 @@ createRoot(document.getElementById("root")!).render(
         >
           <DaoHooksProvider
             keyConfig={{
-              graphKey: import.meta.env.VITE_GRAPH_API_KEY as string,
+              graphKey: env.graphApiKey,
             }}
           >
             <HausThemeProvider>
+              <EnvWarning />
               <RouterProvider router={router} />
             </HausThemeProvider>
           </DaoHooksProvider>
