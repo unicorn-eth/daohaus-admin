@@ -4,6 +4,7 @@ import type { TokenBalance } from '@/lib/dao-hooks';
 const SAFE_API_BASE: Record<string, string> = {
   '0x1': 'https://safe-transaction-mainnet.safe.global',
   '0x64': 'https://safe-transaction-gnosis-chain.safe.global',
+  '0x89': 'https://safe-transaction-polygon.safe.global',
   '0xa': 'https://safe-transaction-optimism.safe.global',
   '0xa4b1': 'https://safe-transaction-arbitrum.safe.global',
   '0x2105': 'https://safe-transaction-base.safe.global',

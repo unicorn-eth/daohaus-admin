@@ -5,6 +5,7 @@ import {
   optimism,
   arbitrum,
   base,
+  polygon,
   sepolia,
 } from "wagmi/chains";
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
@@ -20,7 +21,7 @@ import {
 
 const alchemyKey = import.meta.env.VITE_ALCHEMY_KEY as string;
 const projectId = import.meta.env.VITE_WALLET_CONNECT_ID || ("0x0" as string);
-const chains = [mainnet, gnosis, optimism, arbitrum, base, sepolia] as const;
+const chains = [mainnet, gnosis, optimism, arbitrum, base, polygon, sepolia] as const;
 
 const connectors = connectorsForWallets(
   [
@@ -52,6 +53,7 @@ export const wagmiConfig = createConfig({
     [optimism.id]: http(`https://opt-mainnet.g.alchemy.com/v2/${alchemyKey}`),
     [arbitrum.id]: http(`https://arb-mainnet.g.alchemy.com/v2/${alchemyKey}`),
     [base.id]: http(`https://base-mainnet.g.alchemy.com/v2/${alchemyKey}`),
+    [polygon.id]: http(`https://polygon-mainnet.g.alchemy.com/v2/${alchemyKey}`),
     [sepolia.id]: http(`https://eth-sepolia.g.alchemy.com/v2/${alchemyKey}`),
   },
 });
